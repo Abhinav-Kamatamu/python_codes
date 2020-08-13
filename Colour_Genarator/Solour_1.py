@@ -17,6 +17,7 @@ def quit():
             if i.key == pygame.K_ESCAPE:
                 exit()
         if i.type == pygame.QUIT:
+            
             exit()
 
 
