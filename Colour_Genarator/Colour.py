@@ -17,13 +17,15 @@ def quit():
             if i.key == pygame.K_ESCAPE:
                 exit()
         if i.type == pygame.QUIT:
-            
             exit()
 
 
 for j in range(1, 256):
+
     s20 = [i * 20 + j for i in range(0, 260 // 20)]
+
     for i in range(1, 256):
+
         pygame.draw.rect(win, (r, g, b), (x, y, 1, 1))
         b += 1
         x += 1
