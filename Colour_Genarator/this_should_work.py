@@ -6,29 +6,12 @@ win.fill((255, 255, 255))
 
 pixelsFilled = 0
 
+r = 255
+g = 255
+b = 255
 
-class Pos:
-
-    def __init__(self):
-        self.x = 0
-        self.y = 0
-
-
-class Color:
-
-    def __init__(self):
-        self.r = 255
-        self.g = 255
-        self.b = 255
-        self.rgb = (self.r, self.g, self.b)
-
-    def returncolor(self):
-        return self.rgb
-
-
-color = Color()
-pos = Pos()
-
+x = 0
+y = 0
 
 def stop():
     for i in pygame.event.get():
@@ -38,34 +21,33 @@ def stop():
         if i.type == pygame.QUIT:
             exit()
 
-
 def fill():
-    global pixelsFilled
 
-    while pixelsFilled <= 65025:
+    global pixelsFilled,r,g,b,x,y
 
-        pygame.draw.rect(win, color.returncolor(), (pos.x, pos.y, 1, 1))
+    while pixelsFilled <= 65025 :
+        
+        pygame.draw.rect(win,(r,g,b),(x,y,1,1))
 
-        if pos.x < 255:
+        if x < 255:
 
-            pos.x += 1
+            x += 1
 
-            color.r -= 1
-            color.g -= 1
+            r -= (255 - y)/255
+            g -= (255 - y)/255
 
-        elif pos.x >= 255:
+        elif x <= 255:
 
-            pos.x = 0
-            pos.y -= 1
+            x = 0
+            y += 1
 
-            color.r -= 1
-            color.g -= 1
-            color.b -= 1
-
+            r = 255 - y
+            g = 255 - y
+            b = 255 - y
+ 
         pixelsFilled += 1
 
         pygame.display.update()
-
 
 fill()
 
