@@ -6,19 +6,20 @@ win.fill((255, 255, 255))
 
 pixelsFilled = 0
 
-class pos():
 
+class Pos:
     x = 0
     y = 0
 
-class color():
 
+class Color:
     r = 255
     g = 255
     b = 255
 
-color = color()
-pos = pos()
+
+color = Color()
+pos = Pos()
 
 
 def stop():
@@ -29,13 +30,13 @@ def stop():
         if i.type == pygame.QUIT:
             exit()
 
-def fill():
 
+def fill():
     global pixelsFilled
 
-    while pixelsFilled <= 65025 :
-        
-        pygame.draw.rect(win,(color.r,color.g,color.b),(pos.x,pos.y,1,1))
+    while pixelsFilled <= 65025:
+
+        pygame.draw.rect(win, (color.r, color.g, color.b), (pos.x, pos.y, 1, 1))
 
         if pos.x < 255:
 
@@ -54,6 +55,8 @@ def fill():
             color.b -= 1
 
         pixelsFilled += 1
+        pygame.display.update()
+
 
 fill()
 
