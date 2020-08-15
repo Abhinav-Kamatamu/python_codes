@@ -47,9 +47,9 @@ def fill():
  
         pixelsFilled += 1
 
-        pygame.display.update()
-
 fill()
+
+pygame.display.update()
 
 while True:
     stop()
