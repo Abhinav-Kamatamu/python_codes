@@ -1,17 +1,20 @@
 import pygame
 from time import sleep
 
-win = pygame.display.set_mode((300, 300))
+win = pygame.display.set_mode((255, 255))
 win.fill((255, 255, 255))
-x = 25
-y = 25
-r = 0
-g = 0
-s20 = [i * 20 for i in range(0, 260 // 20)]
-b = 0
+
+pixelsFilled = 0
+
+r = 255
+g = 255
+b = 255
+
+x = 0
+y = 0
 
 
-def quit():
+def stop():
     for i in pygame.event.get():
         if i.type == pygame.KEYDOWN:
             if i.key == pygame.K_ESCAPE:
@@ -20,23 +23,33 @@ def quit():
             exit()
 
 
-for j in range(1, 256):
-    s20 = [i * 20 + j for i in range(0, 260 // 20)]
-    for i in range(1, 256):
+def fill():
+    global pixelsFilled, r, g, b, x, y
+
+    while pixelsFilled <= 65025:
+
         pygame.draw.rect(win, (r, g, b), (x, y, 1, 1))
-        r += 1
-        g += 1
-        x += 1
-        if r in s20:
-            b += 19
-    y += 1
-    r = 0
-    g = 0
-    x = 25
-    b = 0
-    quit()
-print(s20)
+
+        if x < 255:
+
+            x += 1
+            b -= (255 - y) / 255
+
+        elif x <= 255:
+
+            x = 0
+            y += 1
+
+            r = 255 - y
+            g = 255 - y
+            b = 255 - y
+
+        pixelsFilled += 1
+
+
+fill()
+
 pygame.display.update()
+
 while True:
-    quit()
-sleep(100)
+    stop()
