@@ -13,6 +13,7 @@ b = 255
 x = 0
 y = 0
 
+
 def stop():
     for i in pygame.event.get():
         if i.type == pygame.KEYDOWN:
@@ -21,20 +22,20 @@ def stop():
         if i.type == pygame.QUIT:
             exit()
 
+
 def fill():
+    global pixelsFilled, r, g, b, x, y
 
-    global pixelsFilled,r,g,b,x,y
+    while pixelsFilled <= 65025:
 
-    while pixelsFilled <= 65025 :
-        
-        pygame.draw.rect(win,(r,g,b),(x,y,1,1))
+        pygame.draw.rect(win, (r, g, b), (x, y, 1, 1))
 
         if x < 255:
 
             x += 1
 
-            r -= (255 - y)/255
-            g -= (255 - y)/255
+            r -= (255 - y) / 255
+            g -= (255 - y) / 255
 
         elif x <= 255:
 
@@ -44,8 +45,9 @@ def fill():
             r = 255 - y
             g = 255 - y
             b = 255 - y
- 
+
         pixelsFilled += 1
+
 
 fill()
 
