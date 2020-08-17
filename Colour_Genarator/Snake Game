@@ -5,221 +5,233 @@ from time import sleep
 import random
 import sys
 
-width = 500
-height = 500
-
-blue = (133, 180, 255)
-yellow = (255, 255, 165)
-darkYellow = (255, 255, 0)
-red = (255, 150, 150)
-
-gameOver = False
-
-win = pygame.display.set_mode((500,500))
-win.fill((255,255,255))
-
-class Coordinate():
-
-    def __init__(self,x,y):
-
-        self.x = int(x)
-        self.y = int(y)
-
-    def Coordinate(self,x,y):
-
-        self.x = int(x)
-        self.y = int(y)
-
-    def Position(self):
-
-        return self.x,self.y,25,25
-    
-
-class SnakeBlock():
-
-    def __init__(self):
-        
-        self.position = Coordinate(0,0)
-
-    def updateSnakeBlock(self):
-
-        pygame.draw.rect(win,yellow,self.position.Position())
-        
-        
-class Snake():
-
-    def __init__(self):
-
-        self.side = 25
-        self.headPosition = Coordinate(self.side * 9,self.side * 9)
-        self.velocityX = 1
-        self.velocityY = 0
-        self.score = 0
-
-        self.snakeblocks = []
-        self.timestampsX = []
-        self.timestampsY = []
-
-    def updateSnake(self):
-
-        snakeBlocksDrawn = 0
-
-        sleep(0.1)
-
-        self.timestampsX.append(self.headPosition.x)
-        self.timestampsY.append(self.headPosition.y)
-
-        self.headPosition.x += self.velocityX * self.side
-        self.headPosition.y += self.velocityY * self.side
-
-        if len(self.timestampsX) > 400:
-            self.timestampsX.pop(0)
-            self.timestampsY.pop(0)
-
-        while snakeBlocksDrawn < len(self.snakeblocks):
-
-            self.snakeblocks[snakeBlocksDrawn].position.Coordinate(self.timestampsX[-(snakeBlocksDrawn + 1)],self.timestampsY[-(snakeBlocksDrawn + 1)])
-            self.snakeblocks[snakeBlocksDrawn].updateSnakeBlock()
-
-            snakeBlocksDrawn += 1
-
-        pygame.draw.rect(win,darkYellow,self.headPosition.Position())
-
-        pygame.display.set_caption(f"Score:{self.score}")
-
-        pygame.display.update()
-
-    def die(self):
-
-        global gameOver    
-
-        snakeBlocksChecked = 0
-        
-        if (self.headPosition.x < 0) or (self.headPosition.x + self.side > width) or (self.headPosition.y < 0) or (self.headPosition.y + self.side > height):
-            
-            gameOver = True
-
-        while snakeBlocksChecked < len(self.snakeblocks):
-
-            if (self.snakeblocks[snakeBlocksChecked].position.x == self.headPosition.x) and (self.snakeblocks[snakeBlocksChecked].position.y == self.headPosition.y):
-                
-                gameOver = True
-                break
-
-            else:
-                snakeBlocksChecked += 1
-            
-
-snake = Snake()
-
-class Food():
-
-    def __init__(self):
-
-        self.poweredUP = False
-        self.side = 25
-        self.Position = Coordinate(random.randint(0,19) * self.side, random.randint(0,19) * self.side)
-
-    def UpdatePos(self):
-
-        global snake,red
-   
-        ok = False
-        snakeBlocksChecked = 0
-
-        while not ok:
-
-            if (self.Position.x == snake.headPosition.x)and(self.Position.y == snake.headPosition.y):
-
-                chance = random.randint(1,15) 
-                
-                if (self.poweredUP):
-                    
-                    snake.score += 3
-                    snake.snakeblocks.append(SnakeBlock())
-                    snake.snakeblocks.append(SnakeBlock())
-                    snake.snakeblocks.append(SnakeBlock())
-                    
-                else:
-                    
-                    snake.score += 1
-                    snake.snakeblocks.append(SnakeBlock())
-                    
-                self.poweredUP = False
-                self.Position.Coordinate(random.randint(0,19) * self.side, random.randint(0,19) * self.side)
-                
-                if (chance == 1):
-                    self.poweredUP = True
-
-            while snakeBlocksChecked < len(snake.snakeblocks):
-                
-                 if (self.Position.x == snake.snakeblocks[snakeBlocksChecked].position.x) and (self.Position.y == snake.snakeblocks[snakeBlocksChecked].position.y):
-                     self.Position.Coordinate(random.randint(0,19) * self.side, random.randint(0,19) * self.side)
-                     break
-
-                 else:
-                     
-                     snakeBlocksChecked += 1
-
-            else:
-                
-                ok = True
-
-
-        win.fill((255,255,255))
-
-        if (self.poweredUP):
-            
-            pygame.draw.rect(win,blue,self.Position.Position())
-            
-        else:
-            
-            pygame.draw.rect(win,red,self.Position.Position())
-        
-
-apple = Food()
-        
-while not gameOver:
-
-    for event in pygame.event.get():
-        
-        if event.type == pygame.QUIT:
-            
-            pygame.quit()
-            sys.exit()
-
-    keys = pygame.key.get_pressed()
-
-    if keys[pygame.K_w] and snake.velocityY == 0:
-        
-        snake.velocityX = 0
-        snake.velocityY = -1
-        
-    if keys[pygame.K_a] and snake.velocityX == 0:
-        
-        snake.velocityX = -1
-        snake.velocityY = 0
-        
-    if keys[pygame.K_s] and snake.velocityY == 0:
-        
-        snake.velocityX = 0
-        snake.velocityY = 1
-        
-    if keys[pygame.K_d] and snake.velocityX == 0:
-        
-        snake.velocityX = 1
-        snake.velocityY = 0    
-
-
-    apple.UpdatePos()
-    snake.updateSnake()
-    snake.die()
-
-pygame.display.set_caption(f"Game Over (score: {snake.score})")
-
 while True:
 
- for event in pygame.event.get():
-    if event.type == pygame.QUIT:
-        pygame.quit()
-        sys.exit()
+    clock = pygame.time.Clock()
+
+    restart = False
+
+    width = 500
+    height = 500
+
+    blue = (133, 180, 255)
+    yellow = (255, 255, 165)
+    darkYellow = (255, 255, 0)
+    red = (255, 150, 150)
+
+    gameOver = False
+
+    win = pygame.display.set_mode((500,500))
+    win.fill((255,255,255))
+
+    class Coordinate():
+
+        def __init__(self,x,y):
+
+            self.x = int(x)
+            self.y = int(y)
+
+        def Coordinate(self,x,y):
+
+            self.x = int(x)
+            self.y = int(y)
+
+        def Position(self):
+
+            return self.x,self.y,25,25
+        
+
+    class SnakeBlock():
+
+        def __init__(self):
+            
+            self.position = Coordinate(0,0)
+
+        def updateSnakeBlock(self):
+
+            pygame.draw.rect(win,yellow,self.position.Position())
+            
+            
+    class Snake():
+
+        def __init__(self):
+
+            self.side = 25
+            self.headPosition = Coordinate(self.side * 9,self.side * 9)
+            self.velocityX = 1
+            self.velocityY = 0
+            self.score = 0
+
+            self.snakeblocks = []
+            self.timestampsX = []
+            self.timestampsY = []
+
+        def updateSnake(self):
+
+            snakeBlocksDrawn = 0
+
+            self.timestampsX.append(self.headPosition.x)
+            self.timestampsY.append(self.headPosition.y)
+
+            self.headPosition.x += self.velocityX * self.side
+            self.headPosition.y += self.velocityY * self.side
+
+            if len(self.timestampsX) > 400:
+                self.timestampsX.pop(0)
+                self.timestampsY.pop(0)
+
+            while snakeBlocksDrawn < len(self.snakeblocks):
+
+                self.snakeblocks[snakeBlocksDrawn].position.Coordinate(self.timestampsX[-(snakeBlocksDrawn + 1)],self.timestampsY[-(snakeBlocksDrawn + 1)])
+                self.snakeblocks[snakeBlocksDrawn].updateSnakeBlock()
+
+                snakeBlocksDrawn += 1
+
+            pygame.draw.rect(win,darkYellow,self.headPosition.Position())
+
+            pygame.display.set_caption(f"Score:{self.score}")
+
+            pygame.display.update()
+
+        def die(self):
+
+            global gameOver    
+
+            snakeBlocksChecked = 0
+            
+            if (self.headPosition.x < 0) or (self.headPosition.x + self.side > width) or (self.headPosition.y < 0) or (self.headPosition.y + self.side > height):
+                
+                gameOver = True
+
+            while snakeBlocksChecked < len(self.snakeblocks):
+
+                if (self.snakeblocks[snakeBlocksChecked].position.x == self.headPosition.x) and (self.snakeblocks[snakeBlocksChecked].position.y == self.headPosition.y):
+                    
+                    gameOver = True
+                    break
+
+                else:
+                    snakeBlocksChecked += 1
+                
+
+    snake = Snake()
+
+    class Food():
+
+        def __init__(self):
+
+            self.poweredUP = False
+            self.side = 25
+            self.Position = Coordinate(random.randint(0,19) * self.side, random.randint(0,19) * self.side)
+
+        def UpdatePos(self):
+
+            global snake,red
+       
+            ok = False
+            snakeBlocksChecked = 0
+
+            while not ok:
+
+                if (self.Position.x == snake.headPosition.x)and(self.Position.y == snake.headPosition.y):
+
+                    chance = random.randint(1,15) 
+                    
+                    if (self.poweredUP):
+                        
+                        snake.score += 3
+                        snake.snakeblocks.append(SnakeBlock())
+                        snake.snakeblocks.append(SnakeBlock())
+                        snake.snakeblocks.append(SnakeBlock())
+                        
+                    else:
+                        
+                        snake.score += 1
+                        snake.snakeblocks.append(SnakeBlock())
+                        
+                    self.poweredUP = False
+                    self.Position.Coordinate(random.randint(0,19) * self.side, random.randint(0,19) * self.side)
+                    
+                    if (chance == 1):
+                        self.poweredUP = True
+
+                while snakeBlocksChecked < len(snake.snakeblocks):
+                    
+                     if (self.Position.x == snake.snakeblocks[snakeBlocksChecked].position.x) and (self.Position.y == snake.snakeblocks[snakeBlocksChecked].position.y):
+                         self.Position.Coordinate(random.randint(0,19) * self.side, random.randint(0,19) * self.side)
+                         break
+
+                     else:
+                         
+                         snakeBlocksChecked += 1
+
+                else:
+                    
+                    ok = True
+
+
+            win.fill((255,255,255))
+
+            if (self.poweredUP):
+                
+                pygame.draw.rect(win,blue,self.Position.Position())
+                
+            else:
+                
+                pygame.draw.rect(win,red,self.Position.Position())
+            
+
+    apple = Food()
+            
+    while not gameOver:
+
+        clock.tick(10)
+
+        for event in pygame.event.get():
+            
+            if event.type == pygame.QUIT:
+                
+                pygame.quit()
+                sys.exit()
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_w] and snake.velocityY == 0:
+            
+            snake.velocityX = 0
+            snake.velocityY = -1
+            
+        if keys[pygame.K_a] and snake.velocityX == 0:
+            
+            snake.velocityX = -1
+            snake.velocityY = 0
+            
+        if keys[pygame.K_s] and snake.velocityY == 0:
+            
+            snake.velocityX = 0
+            snake.velocityY = 1
+            
+        if keys[pygame.K_d] and snake.velocityX == 0:
+            
+            snake.velocityX = 1
+            snake.velocityY = 0    
+
+
+        apple.UpdatePos()
+        snake.updateSnake()
+        snake.die()
+
+    pygame.display.set_caption(f"Game Over (score: {snake.score}) *press enter to restart*")
+
+    while not restart:
+
+        keys = pygame.key.get_pressed()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        if keys[pygame.K_RETURN]:
+            
+             restart = True
