@@ -74,16 +74,16 @@ while not gameOver:
 
     keys = pygame.key.get_pressed()
 
-    if keys[pygame.K_w]:
+    if keys[pygame.K_w] and snake.velocityY == 0 :
         snake.velocityX = 0
         snake.velocityY = -1
-    if keys[pygame.K_a]:
+    if keys[pygame.K_a] and snake.velocityX == 0:
         snake.velocityX = -1
         snake.velocityY = 0
-    if keys[pygame.K_s]:
+    if keys[pygame.K_s] and snake.velocityY == 0:
         snake.velocityX = 0
         snake.velocityY = 1
-    if keys[pygame.K_d]:
+    if keys[pygame.K_d] and snake.velocityX == 0:
         snake.velocityX = 1
         snake.velocityY = 0    
 
