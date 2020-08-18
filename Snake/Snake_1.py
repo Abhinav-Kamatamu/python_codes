@@ -34,33 +34,35 @@ class Snake:
     def __init__(self):
         self.x = rand.randint(0, w)
         self.y = rand.randint(0, h)
-        self.length = 10
+        self.length = 3
+        self.size = 20
         self.list = []
         self.direction = 'right'
         for i in range(self.length):
-            self.list.append([self.x - 5 * i, self.y])
+            self.list.append([self.x - self.size * i, self.y])
 
     def draw(self):
+        pygame.display.update()
         win.fill((255, 255, 255))
         for i in range(self.length):
-            pygame.draw.rect(win, (255, 255, 255), (self.list[i][0], self.list[i][1], 5, 5))
-            pygame.display.update()
+            pygame.draw.rect(win, (0, 0, 0), (self.list[i][0], self.list[i][1], self.size, self.size))
 
     def move(self):
-        self.changeDirection()
+        self.change_direction()
         if self.direction == 'right':
-            self.list[-1][0] = self.list[-1][0] + 5
+            self.list[-1][0] += self.size
         if self.direction == 'left':
-            self.list[-1][0] = self.list[-1][0] - 5
+            self.list[-1][0] -= self.size
         if self.direction == 'up':
-            self.list[-1][1] = self.list[-1][1] - 5
+            self.list[-1][1] -= self.size
         if self.direction == 'down':
-            self.list[-1][1] = self.list[-1][1] + 5
+            self.list[-1][1] += self.size
 
-        for i in range(self.length - 1):
+        for i in range(self.length -1):
             self.list[i][0] = self.list[i + 1][0]
             self.list[i][1] = self.list[i + 1][1]
-    def changeDirection(self):
+
+    def change_direction(self):
         keys = pygame.key.get_pressed()
         if keys[K_UP]:
             self.direction = 'up'
@@ -72,13 +74,12 @@ class Snake:
             self.direction = 'down'
 
 
-
 #                                             -------------Classes-------------
 
 
 snake = Snake()
 while True:
-    snake.draw()
     snake.move()
+    snake.draw()
     clock.tick(6)
     stop()
