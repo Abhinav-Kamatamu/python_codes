@@ -208,9 +208,6 @@ while True:
             snake.velocityX = 1
             snake.velocityY = 0
 
-        if keys[K_ESCAPE]:
-            exit()
-
         apple.UpdatePos()
         snake.updateSnake()
         snake.die()
@@ -254,6 +251,10 @@ while True:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+        if keys[K_ESCAPE]:
+            pygame.quit()
+            sys.exit()
 
         if keys[pygame.K_RETURN]:
             restart = True
