@@ -20,7 +20,7 @@ while True:
     new_highscore = False
     restart = False
 
-    win = pygame.display.set_mode((500, 500))
+    win = pygame.display.set_mode((width, height))
     win.fill((255, 255, 255))
 
 
