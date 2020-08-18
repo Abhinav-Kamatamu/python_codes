@@ -34,7 +34,7 @@ class Snake:
     def __init__(self):
         self.x = rand.randint(0, w)
         self.y = rand.randint(0, h)
-        self.length = 3
+        self.length = 10
         self.size = 20
         self.list = []
         self.direction = 'right'
@@ -64,13 +64,13 @@ class Snake:
 
     def change_direction(self):
         keys = pygame.key.get_pressed()
-        if keys[K_UP]:
+        if keys[K_UP] and self.direction != 'down':
             self.direction = 'up'
-        if keys[K_RIGHT]:
+        if keys[K_RIGHT] and self.direction != 'left':
             self.direction = 'right'
-        if keys[K_LEFT]:
+        if keys[K_LEFT] and self.direction != 'right':
             self.direction = 'left'
-        if keys[K_DOWN]:
+        if keys[K_DOWN] and self.direction != 'up':
             self.direction = 'down'
 
 
@@ -81,5 +81,5 @@ snake = Snake()
 while True:
     snake.move()
     snake.draw()
-    clock.tick(6)
+    clock.tick(10)
     stop()
