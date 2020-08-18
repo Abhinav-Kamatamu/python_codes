@@ -94,9 +94,21 @@ while True:
 
             snakeBlocksChecked = 0
 
-            if (self.headPosition.x < 0) or (self.headPosition.x + self.side > width) or (self.headPosition.y < 0) or (
-                    self.headPosition.y + self.side > height):
-                gameOver = True
+            if self.headPosition.x < 0:
+
+                self.headPosition.x = self.side * 19
+
+            elif self.headPosition.x + self.side > width:
+
+                self.headPosition.x = 0
+
+            elif self.headPosition.y < 0:
+
+                self.headPosition.y = self.side * 19
+
+            elif self.headPosition.y + self.side > height:
+
+                self.headPosition.y = 0
 
             while snakeBlocksChecked < len(self.snake):
 
