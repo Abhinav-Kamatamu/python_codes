@@ -1,3 +1,4 @@
+import pickle
 import pygame
 from pygame import *
 import random
@@ -6,8 +7,6 @@ import sys
 while True:
 
     clock = pygame.time.Clock()
-
-    restart = False
 
     width = 500
     height = 500
@@ -18,6 +17,8 @@ while True:
     red = (255, 150, 150)
 
     gameOver = False
+    new_highscore = False
+    restart = False
 
     win = pygame.display.set_mode((500, 500))
     win.fill((255, 255, 255))
@@ -71,7 +72,6 @@ while True:
             self.headPosition.y += self.velocityY * self.side
 
             if len(self.timestampsX) > 400:
-
                 self.timestampsX.pop(0)
                 self.timestampsY.pop(0)
 
@@ -212,7 +212,36 @@ while True:
         snake.updateSnake()
         snake.die()
 
-    pygame.display.set_caption("Game Over (score: {}) *press enter to restart*".format(snake.score))
+    try:
+
+        with open('score.dat', 'rb') as file:
+            highscore = pickle.load(file)
+
+    except:
+
+        highscore = 0
+
+    if highscore < snake.score:
+
+        highscore = snake.score
+        new_highscore = True
+
+    elif highscore >= snake.score:
+
+        new_highscore = False
+
+    with open('score.dat', 'wb') as file:
+        pickle.dump(highscore, file)
+
+    if not new_highscore:
+
+        pygame.display.set_caption(
+            "Game Over (score: {}, highscore: {}) *press enter to restart*".format(snake.score, highscore))
+
+    else:
+
+        pygame.display.set_caption(
+            "Game Over (score: {}, highscore: {} [NEW HIGHSCORE!])".format(snake.score, highscore))
 
     while not restart:
 
