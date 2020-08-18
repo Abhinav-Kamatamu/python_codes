@@ -82,4 +82,5 @@ while True:
     snake.move()
     snake.draw()
     clock.tick(10)
+
     stop()
