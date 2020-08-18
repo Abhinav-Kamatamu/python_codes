@@ -1,6 +1,6 @@
 import pickle
 import pygame
-from pygame import *
+from pygame.locals import *
 import random
 import sys
 
@@ -192,21 +192,24 @@ while True:
 
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_w] and snake.velocityY == 0:
+        if (keys[pygame.K_w] or keys[K_UP]) and snake.velocityY == 0:
             snake.velocityX = 0
             snake.velocityY = -1
 
-        if keys[pygame.K_a] and snake.velocityX == 0:
+        if (keys[pygame.K_a] or keys[K_LEFT]) and snake.velocityX == 0:
             snake.velocityX = -1
             snake.velocityY = 0
 
-        if keys[pygame.K_s] and snake.velocityY == 0:
+        if (keys[pygame.K_s] or keys[K_DOWN]) and snake.velocityY == 0:
             snake.velocityX = 0
             snake.velocityY = 1
 
-        if keys[pygame.K_d] and snake.velocityX == 0:
+        if (keys[pygame.K_d] or keys[K_RIGHT]) and snake.velocityX == 0:
             snake.velocityX = 1
             snake.velocityY = 0
+
+        if keys[K_ESCAPE]:
+            exit()
 
         apple.UpdatePos()
         snake.updateSnake()
