@@ -84,7 +84,7 @@ while True:
 
             pygame.draw.rect(win, darkYellow, self.headPosition.Position())
 
-            pygame.display.set_caption(f"Score:{self.score}")
+            pygame.display.set_caption("Score:{}".format(self.score))
 
             pygame.display.update()
 
@@ -212,7 +212,7 @@ while True:
         snake.updateSnake()
         snake.die()
 
-    pygame.display.set_caption(f"Game Over (score: {snake.score}) *press enter to restart*")
+    pygame.display.set_caption("Game Over (score: {}) *press enter to restart*".format(snake.score))
 
     while not restart:
 
