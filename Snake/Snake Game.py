@@ -12,7 +12,7 @@ while True:
     height = 500
 
     blue = (255, 255, 125)
-    yellow = (165, 255, 165)
+    yellow = (184, 255, 203)
     darkYellow = (100, 255, 100)
     red = (255, 150, 150)
 
