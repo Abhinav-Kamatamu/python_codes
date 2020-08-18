@@ -11,9 +11,9 @@ while True:
     width = 500
     height = 500
 
-    blue = (133, 180, 255)
-    yellow = (255, 255, 165)
-    darkYellow = (255, 255, 0)
+    blue = (255, 255, 125)
+    yellow = (165, 255, 165)
+    darkYellow = (100, 255, 100)
     red = (255, 150, 150)
 
     gameOver = False
@@ -132,11 +132,11 @@ while True:
 
                 if (self.Position.x == snake.headPosition.x) and (self.Position.y == snake.headPosition.y):
 
-                    chance = random.randint(1, 15)
+                    chance = random.randint(1, 50)
 
                     if self.poweredUP:
 
-                        snake.score += 3
+                        snake.score += 10
                         snake.snake.append(SnakeBlock())
                         snake.snake.append(SnakeBlock())
                         snake.snake.append(SnakeBlock())
