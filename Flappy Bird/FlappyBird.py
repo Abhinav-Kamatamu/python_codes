@@ -5,7 +5,7 @@ import sys
 import random
 
 width = 1000
-height = 500
+height = 700
 
 jumpCount = 0
 gravityCount = 0
@@ -47,8 +47,8 @@ while restart:
 
             self.position = Coordinate(width/4, height/2 - (self.height/2))
 
-            self.velocity = 7
-            self.mass = 0.2
+            self.velocity = 5
+            self.mass = 1
             self.force = None
             self.gravity = -1
 
@@ -63,7 +63,7 @@ while restart:
 
                 gravityCount += 1
 
-                if gravityCount % 20 == 0 and self.gravity > -10:
+                if gravityCount % 20 == 0 and self.gravity > -20:
 
                     self.gravity -= 1
 
@@ -83,13 +83,17 @@ while restart:
 
             global jumpCount
 
-            self.force = (1/2) * self.mass * (self.velocity ** 2)
+            self.force = (1/2 * self.mass) * (self.velocity ** 2)
 
             if self.velocity < 0:
 
                 self.force = -self.force
 
             jumpCount += 1
+
+            if int(self.force) == 0 and jumpCount % 5 == 0:
+
+                self.force = 1
 
             if jumpCount % 10 == 0:
 
@@ -101,9 +105,9 @@ while restart:
 
                 self.jumpAble = True
 
-            if self.velocity == -8:
+            if self.velocity == -6:
 
-                self.gravity = -8
+                self.gravity = -12
                 self.isJumping = False
 
     bird = FlappyBird()
@@ -122,7 +126,7 @@ while restart:
 
         if keys[K_SPACE] and bird.jumpAble:
 
-            bird.velocity = 7
+            bird.velocity = 5
             jumpCount = 0
 
             bird.jumpAble = False
