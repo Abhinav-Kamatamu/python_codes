@@ -1,10 +1,14 @@
 import pygame
+from pygame import *
 from pygame.locals import *
 import sys
 import random
 
 width = 1000
 height = 500
+
+jumpCount = 0
+gravityCount = 0
 
 clock = pygame.time.Clock()
 
@@ -13,7 +17,6 @@ yellow = (255, 255, 150)
 
 restart = True
 gameOver = False
-jumpAble = True
 
 screen = pygame.display.set_mode((width, height))
 screen.fill(white)
@@ -41,10 +44,34 @@ while restart:
 
             self.height = 50
             self.width = 65
+
             self.position = Coordinate(width/4, height/2 - (self.height/2))
-            self.velocity = 0
+
+            self.velocity = 7
+            self.mass = 0.2
+            self.force = None
+            self.gravity = -1
+
+            self.jumpAble = True
+            self.isJumping = False
 
         def Draw(self):
+
+            global gravityCount
+
+            if not self.isJumping:
+
+                gravityCount += 1
+
+                if gravityCount % 20 == 0 and self.gravity > -10:
+
+                    self.gravity -= 1
+
+                self.position.y -= self.gravity
+
+            else:
+
+                self.gravity = 0
 
             screen.fill(white)
 
@@ -54,30 +81,36 @@ while restart:
 
         def Jump(self):
 
-            global jumpAble
+            global jumpCount
 
-            jumpAble = False
+            self.force = (1/2) * self.mass * (self.velocity ** 2)
 
-            instataneousVelocity = 10
+            if self.velocity < 0:
 
-            while instataneousVelocity >= -10:
+                self.force = -self.force
 
-                self.velocity = 0
-                self.velocity = instataneousVelocity
-                self.position.y += self.velocity
+            jumpCount += 1
 
-                self.Draw()
+            if jumpCount % 10 == 0:
 
-                instataneousVelocity -= 1
+                self.velocity -= 1
 
-            self.velocity = 0
-            jumpAble = True
+            self.position.y -= int(self.force)
+
+            if self.velocity == 0:
+
+                self.jumpAble = True
+
+            if self.velocity == -8:
+
+                self.gravity = -8
+                self.isJumping = False
 
     bird = FlappyBird()
 
     while not gameOver:
 
-        clock.tick(60)
+        clock.tick(120)
 
         for event in pygame.event.get():
 
@@ -87,8 +120,29 @@ while restart:
 
         keys = pygame.key.get_pressed()
 
-        if keys[K_SPACE] and jumpAble:
+        if keys[K_SPACE] and bird.jumpAble:
+
+            bird.velocity = 7
+            jumpCount = 0
+
+            bird.jumpAble = False
+            bird.isJumping = True
+
+        if bird.isJumping:
 
             bird.Jump()
 
         bird.Draw()
+
+# if pressed_keys[K_SPACE]:
+#            if jumpCount >= -10:
+#                isJump = True
+#                print(jumpCount)
+#                neg = 1
+#                if jumpCount < 0:
+#                    neg = -1
+#                self.y -= (jumpCount ** 2) * 0.1 * neg
+#                jumpCount -= 1
+#            else:
+#                isJump = False
+#                jumpCount = 10
