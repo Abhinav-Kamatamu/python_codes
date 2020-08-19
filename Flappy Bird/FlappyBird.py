@@ -4,6 +4,8 @@ from pygame.locals import *
 import sys
 import random
 
+pygame.init()
+
 width = 1000
 height = 700
 
@@ -75,7 +77,8 @@ while restart:
 
             screen.fill(white)
 
-            pygame.draw.ellipse(screen, yellow, self.position.ReturnRect(self.width, self.height))
+            ellipse = pygame.draw.ellipse(screen, yellow, self.position.ReturnRect(self.width, self.height))
+
 
             pygame.display.update()
 
@@ -137,16 +140,3 @@ while restart:
             bird.Jump()
 
         bird.Draw()
-
-# if pressed_keys[K_SPACE]:
-#            if jumpCount >= -10:
-#                isJump = True
-#                print(jumpCount)
-#                neg = 1
-#                if jumpCount < 0:
-#                    neg = -1
-#                self.y -= (jumpCount ** 2) * 0.1 * neg
-#                jumpCount -= 1
-#            else:
-#                isJump = False
-#                jumpCount = 10
