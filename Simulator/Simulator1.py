@@ -45,12 +45,24 @@ while restart:
         def __init__(self, x, y, teamNo):
 
             self.position = Coordinate(x, y)
+            self.velocity = Coordinate (0 ,0)
             self.team = teamNo
             self.color = (teamColors[3 * teamNo], teamColors[3 * teamNo + 1], teamColors[3 * teamNo + 2])
 
         def DrawParticle(self):
 
             pygame.draw.rect(win, self.color, self.position.rect())
+
+        def Move(self):
+
+            self.velocity.x = random.randint(-1,1)
+            self.velocity.y = random.randint(-1,1)
+
+            if self.position.x + self.velocity.x > 0 or self.position.x + self.velocity.x < 598:
+                self.position.x += self.velocity.x
+
+            if self.position.y + self.velocity.y > 0 or self.position.y + self.velocity.y < 598:
+                self.position.y += self.velocity.y
 
     def Initiate():
 
@@ -84,6 +96,7 @@ while restart:
         while particlesDrawn < len(particles):
 
             particles[particlesDrawn].DrawParticle()
+            particles[particlesDrawn].Move()
 
             particlesDrawn += 1
 
@@ -91,7 +104,7 @@ while restart:
 
         global restart, pause
 
-        clock.tick(5)
+        clock.tick(60)
 
         redrawWindowScreen()
         pygame.display.update()
