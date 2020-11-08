@@ -1,3 +1,5 @@
+from urllib.request import urlopen
+import io
 import pygame
 from pygame import *
 from pygame.locals import *
@@ -23,6 +25,11 @@ gameOver = False
 screen = pygame.display.set_mode((width, height))
 screen.fill(white)
 
+image_url = 'https://healthfulness.000webhostapp.com/FlappBird.png'
+image_str = urlopen(image_url).read()
+image_file = io.BytesIO(image_str)
+flappyBirdIMG = pygame.image.load(image_file)
+
 pygame.display.update()
 
 while restart:
@@ -36,21 +43,21 @@ while restart:
             self.x = int(x)
             self.y = int(y)
 
-        def ReturnRect(self, width, height):
+        def ReturnRect(self):
 
-            return self.x, self.y, width, height
+            return self.x, self.y
 
     class FlappyBird:
 
         def __init__(self):
 
             self.height = 50
-            self.width = 65
+            self.width = 60
 
             self.position = Coordinate(width/4, height/2 - (self.height/2))
 
             self.velocity = 5
-            self.mass = 1
+            self.mass = 0.5
             self.force = None
             self.gravity = -1
 
@@ -77,10 +84,7 @@ while restart:
 
             screen.fill(white)
 
-            ellipse = pygame.draw.ellipse(screen, yellow, self.position.ReturnRect(self.width, self.height))
-
-
-            pygame.display.update()
+            screen.blit(image, (self.position.x, self.position.y))
 
         def Jump(self):
 

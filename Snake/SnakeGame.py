@@ -11,6 +11,8 @@ while True:
     width = 500
     height = 500
 
+    short = 25
+
     blue = (255, 255, 125)
     yellow = (184, 255, 203)
     darkYellow = (100, 255, 100)
@@ -34,17 +36,38 @@ while True:
             self.x = int(x)
             self.y = int(y)
 
-        def Position(self):
-            return self.x, self.y, 25, 25
+        def Position(self, xOffset, yOffset, w, h):
+            return self.x + xOffset, self.y + yOffset, w, h
 
 
     class SnakeBlock:
 
         def __init__(self):
             self.position = Coordinate(0, 0)
+            self.neighbours = []
 
         def updateSnakeBlock(self):
-            pygame.draw.rect(win, yellow, self.position.Position())
+
+            i = 0
+
+            while i < 2:
+
+                if self.neighbours[i].position.x < self.position.x:
+                    pygame.draw.rect(win, yellow, self.position.Position(0, 2, 23, 21))
+
+                if self.neighbours[i].position.x > self.position.x:
+                    pygame.draw.rect(win, yellow, self.position.Position(2, 2, 23, 21))
+
+                if self.neighbours[i].position.y < self.position.y:
+                    pygame.draw.rect(win, yellow, self.position.Position(2, 0, 21, 23))
+
+                if self.neighbours[i].position.y < self.position.y:
+                    pygame.draw.rect(win, yellow, self.position.Position(2, 2, 21, 23))
+
+                if len(self.neighbours) < 2:
+                    break
+
+                i += 1
 
 
     class Snake:
@@ -52,10 +75,12 @@ while True:
         def __init__(self):
 
             self.side = 25
-            self.headPosition = Coordinate(self.side * 9, self.side * 9)
+            self.position = Coordinate(self.side * 9, self.side * 9)
             self.velocityX = 1
             self.velocityY = 0
             self.score = 0
+
+            self.blockEaten = False
 
             self.snake = []
             self.timestampsX = []
@@ -65,11 +90,11 @@ while True:
 
             snakeBlocksDrawn = 0
 
-            self.timestampsX.append(self.headPosition.x)
-            self.timestampsY.append(self.headPosition.y)
+            self.timestampsX.append(self.position.x)
+            self.timestampsY.append(self.position.y)
 
-            self.headPosition.x += self.velocityX * self.side
-            self.headPosition.y += self.velocityY * self.side
+            self.position.x += self.velocityX * self.side
+            self.position.y += self.velocityY * self.side
 
             if len(self.timestampsX) > 400:
                 self.timestampsX.pop(0)
@@ -78,11 +103,12 @@ while True:
             while snakeBlocksDrawn < len(self.snake):
                 self.snake[snakeBlocksDrawn].position.Coordinate(self.timestampsX[-(snakeBlocksDrawn + 1)],
                                                                  self.timestampsY[-(snakeBlocksDrawn + 1)])
+
                 self.snake[snakeBlocksDrawn].updateSnakeBlock()
 
                 snakeBlocksDrawn += 1
 
-            pygame.draw.rect(win, darkYellow, self.headPosition.Position())
+            pygame.draw.rect(win, darkYellow, self.position.Position(0, 0, 25, 25))
 
             pygame.display.set_caption("Score:{}".format(self.score))
 
@@ -94,31 +120,32 @@ while True:
 
             snakeBlocksChecked = 0
 
-            if self.headPosition.x < 0:
+            if self.position.x < 0:
 
-                self.headPosition.x = self.side * 19
+                self.position.x = self.side * 19
 
-            elif self.headPosition.x + self.side > width:
+            elif self.position.x + self.side > width:
 
-                self.headPosition.x = 0
+                self.position.x = 0
 
-            elif self.headPosition.y < 0:
+            elif self.position.y < 0:
 
-                self.headPosition.y = self.side * 19
+                self.position.y = self.side * 19
 
-            elif self.headPosition.y + self.side > height:
+            elif self.position.y + self.side > height:
 
-                self.headPosition.y = 0
+                self.position.y = 0
 
             while snakeBlocksChecked < len(self.snake):
 
-                if (self.snake[snakeBlocksChecked].position.x == self.headPosition.x) and (
-                        self.snake[snakeBlocksChecked].position.y == self.headPosition.y):
+                if (self.snake[snakeBlocksChecked].position.x == self.position.x) and (
+                        self.snake[snakeBlocksChecked].position.y == self.position.y):
 
                     gameOver = True
                     break
 
                 else:
+
                     snakeBlocksChecked += 1
 
 
@@ -142,22 +169,45 @@ while True:
 
             while not ok:
 
-                if (self.Position.x == snake.headPosition.x) and (self.Position.y == snake.headPosition.y):
+                if (self.Position.x == snake.position.x) and (self.Position.y == snake.position.y):
 
                     chance = random.randint(1, 50)
 
                     if self.poweredUP:
 
                         snake.score += 10
+
                         snake.snake.append(SnakeBlock())
+
+                        if not snake.blockEaten:
+
+                            snake.snake[-1].neighbours.append(snake)
+
+                        else:
+
+                            snake.snake[-1].neighbours.append(snake.snake[-2])
+
                         snake.snake.append(SnakeBlock())
+                        snake.snake[-1].neighbours.append(snake.snake[-2])
+
                         snake.snake.append(SnakeBlock())
+                        snake.snake[-1].neighbours.append(snake.snake[-2])
 
                     else:
 
                         snake.score += 1
+
                         snake.snake.append(SnakeBlock())
 
+                        if not snake.blockEaten:
+
+                            snake.snake[-1].neighbours.append(snake)
+
+                        else:
+
+                            snake.snake[-1].neighbours.append(snake.snake[-2])
+
+                    snake.blockEaten = True
                     self.poweredUP = False
                     self.Position.Coordinate(random.randint(0, 19) * self.side, random.randint(0, 19) * self.side)
 
@@ -168,6 +218,7 @@ while True:
 
                     if (self.Position.x == snake.snake[snakeBlocksChecked].position.x) and (
                             self.Position.y == snake.snake[snakeBlocksChecked].position.y):
+
                         self.Position.Coordinate(random.randint(0, 19) * self.side, random.randint(0, 19) * self.side)
                         break
 
@@ -183,11 +234,11 @@ while True:
 
             if self.poweredUP:
 
-                pygame.draw.rect(win, blue, self.Position.Position())
+                pygame.draw.rect(win, blue, self.Position.Position(2, 2, 21, 21))
 
             else:
 
-                pygame.draw.rect(win, red, self.Position.Position())
+                pygame.draw.rect(win, red, self.Position.Position(2, 2, 21, 21))
 
 
     apple = Food()
