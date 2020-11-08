@@ -104,30 +104,33 @@ while restart:
 
         global restart, pause
 
-        clock.tick(144)
+        if not pause:
 
-        redrawWindowScreen()
-        pygame.display.update()
+            clock.tick(144)
 
-        keys = pygame.key.get_pressed()
+            redrawWindowScreen()
+            pygame.display.update()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            keys = pygame.key.get_pressed()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            if keys[K_SPACE]:
+
+                pause = True
+
+            if keys[K_ESCAPE]:
                 pygame.quit()
                 sys.exit()
 
+            if keys[pygame.K_RETURN]:
+                restart = True
+                pause = True
+
         if keys[K_SPACE]:
-
-            pause = True
-
-        if keys[K_ESCAPE]:
-            pygame.quit()
-            sys.exit()
-
-        if keys[pygame.K_RETURN]:
-            restart = True
-            pause = True
-
-    while not pause:
+            pause = False
 
         main()
