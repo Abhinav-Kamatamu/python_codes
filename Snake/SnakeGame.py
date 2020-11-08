@@ -32,15 +32,13 @@ while True:
             self.neighbours = []
 
 
-            global yellow
-
             i = 0
 
             while i < 2:
 
-                if i == 1:
 
                 if self.neighbours[i].position.x < self.position.x:
+
                     pygame.draw.rect(win, yellow, self.position.Position(0, 2, 23, 21))
 
                 if self.neighbours[i].position.x > self.position.x:
