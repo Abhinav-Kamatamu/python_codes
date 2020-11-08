@@ -88,7 +88,7 @@ while restart:
 
             particlesCounted += 1
 
-        pygame.diplay.set_caption(f"RED:{redScore} GREEN:{greenScore} BLUE:{blueScore} YELLOW:{yellowScore}")
+        pygame.display.set_caption(f"RED:{redScore} GREEN:{greenScore} BLUE:{blueScore} YELLOW:{yellowScore}")
 
 
     def Initiate():
