@@ -74,7 +74,7 @@ while restart:
 
             praticlesInstantiated = 0
 
-            while praticlesInstantiated < 50:
+            while praticlesInstantiated < 200:
 
                 particles.append(Particle(random.randint(0, 598), random.randint(0, 598), teamNum))
 
@@ -104,7 +104,7 @@ while restart:
 
         global restart, pause
 
-        clock.tick(60)
+        clock.tick(144)
 
         redrawWindowScreen()
         pygame.display.update()
