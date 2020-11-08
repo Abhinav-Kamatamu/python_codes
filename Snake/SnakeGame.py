@@ -52,16 +52,16 @@ while True:
 
             while i < 2:
 
-                if (self.neighbours[i].position.x < self.position.x) and (self.neighbours[i].position.y == self.position.y):
+                if self.neighbours[i].position.x < self.position.x:
                     pygame.draw.rect(win, yellow, self.position.Position(0, 2, 23, 21))
 
-                if (self.neighbours[i].position.x > self.position.x) and (self.neighbours[i].position.y == self.position.y):
+                if self.neighbours[i].position.x > self.position.x:
                     pygame.draw.rect(win, yellow, self.position.Position(2, 2, 23, 21))
 
-                if (self.neighbours[i].position.y < self.position.y) and (self.neighbours[i].position.x == self.position.x):
+                if self.neighbours[i].position.y < self.position.y:
                     pygame.draw.rect(win, yellow, self.position.Position(2, 0, 21, 23))
 
-                if (self.neighbours[i].position.y > self.position.y) and (self.neighbours[i].position.x == self.position.x):
+                if self.neighbours[i].position.y > self.position.y:
                     pygame.draw.rect(win, yellow, self.position.Position(2, 2, 21, 23))
 
                 if len(self.neighbours) < 2:
