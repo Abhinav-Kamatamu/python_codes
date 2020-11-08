@@ -8,6 +8,7 @@ restart = True
 while restart:
 
     particles = []
+    tempParticles = []
 
     clock = pygame.time.Clock()
 
@@ -15,6 +16,8 @@ while restart:
 
     width = 600
     height = 600
+
+    scores = [0, 0, 0, 0]
 
     teamColors = [
                     255, 0, 0,
@@ -57,38 +60,54 @@ while restart:
             self.velocity.x = random.randint(-1,1)
             self.velocity.y = random.randint(-1,1)
 
-            if self.position.x + self.velocity.x > 0 or self.position.x + self.velocity.x < 598:
+            if 0 < self.position.x + self.velocity.x < height - 2:
                 self.position.x += self.velocity.x
-
-            if self.position.y + self.velocity.y > 0 or self.position.y + self.velocity.y < 598:
+            if 0 < self.position.y + self.velocity.y < height - 2:
                 self.position.y += self.velocity.y
 
+    def CheckReaction():
+
+        global particles, tempParticles
+
+        particlesChecked = 0
+        particlesReacted = 0
+
+        while particlesChecked < len(particles):
+
+            while particlesReacted < len(particles):
+
+                if (particles[particlesChecked].team == particles[particlesReacted].team and (-4 < particles[particlesChecked].position.x - particles[particlesReacted].position.x < 4 and -4 < particles[particlesChecked].position.y - particles[particlesReacted].position.y < 4)) and (particlesReacted != particlesChecked):
+
+                    tempParticles.append( Particle(particles[particlesChecked].position.x + random.randint(-4,4), particles[particlesChecked].position.y + random.randint(-4,4), particles[particlesChecked].team))
+
+                if (particles[particlesChecked].position.x == particles[partilcesReacted].position.x) and (particles[particlesChecked].position.y == particles[partilcesReacted].position.y) and particles[particlesChecked].team != particles[particlesChecked].team and scores[particles[particlesChecked].team] > scores [particles[particlesReacted.team]]:
+
+                    del(particles[particlesReacted])
+
+                particlesReacted += 1
+
+           particlesChecked += 1
 
     def UpdateCaption():
 
         global particles
-
-        redScore = 0
-        blueScore = 0
-        greenScore = 0
-        yellowScore = 0
 
         particlesCounted = 0
 
         while particlesCounted < len(particles):
 
             if particles[particlesCounted].team == 0:
-                redScore += 1
+                scores[0] += 1
             if particles[particlesCounted].team == 1:
-                greenScore += 1
+                scores[1] += 1
             if particles[particlesCounted].team == 2:
-                blueScore += 1
+                scores[2] += 1
             if particles[particlesCounted].team == 3:
-                yellowScore += 1
+                scores[3] += 1
 
             particlesCounted += 1
 
-        pygame.display.set_caption(f"RED:{redScore} GREEN:{greenScore} BLUE:{blueScore} YELLOW:{yellowScore}")
+        pygame.display.set_caption(f"RED:{scores[0]}   GREEN:{scores[1]}   BLUE:{scores[2]}   YELLOW:{scores[3]}")
 
 
     def Initiate():
@@ -103,7 +122,7 @@ while restart:
 
             while praticlesInstantiated < 300:
 
-                particles.append(Particle(random.randint(0, 598), random.randint(0, 598), teamNum))
+                particles.append(Particle(random.randint(0, width - 2), random.randint(0, height - 2), teamNum))
 
                 praticlesInstantiated += 1
 
@@ -132,7 +151,7 @@ while restart:
 
         global restart
 
-        clock.tick(144)
+        clock.tick(70000)
 
         redrawWindowScreen()
         pygame.display.update()
@@ -150,7 +169,6 @@ while restart:
 
         if keys[pygame.K_RETURN]:
             restart = True
-            pause = True
 
     while not restart:
 
