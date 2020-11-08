@@ -52,16 +52,16 @@ while True:
 
             while i < 2:
 
-                if self.neighbours[i].position.x < self.position.x:
+                if (self.neighbours[i].position.x < self.position.x) and (self.neighbours[i].position.y == self.position.y):
                     pygame.draw.rect(win, yellow, self.position.Position(0, 2, 23, 21))
 
-                if self.neighbours[i].position.x > self.position.x:
+                if (self.neighbours[i].position.x > self.position.x) and (self.neighbours[i].position.y == self.position.y):
                     pygame.draw.rect(win, yellow, self.position.Position(2, 2, 23, 21))
 
-                if self.neighbours[i].position.y < self.position.y:
+                if (self.neighbours[i].position.y < self.position.y) and (self.neighbours[i].position.x == self.position.x):
                     pygame.draw.rect(win, yellow, self.position.Position(2, 0, 21, 23))
 
-                if self.neighbours[i].position.y < self.position.y:
+                if (self.neighbours[i].position.y > self.position.y) and (self.neighbours[i].position.x == self.position.x):
                     pygame.draw.rect(win, yellow, self.position.Position(2, 2, 21, 23))
 
                 if len(self.neighbours) < 2:
@@ -108,7 +108,27 @@ while True:
 
                 snakeBlocksDrawn += 1
 
-            pygame.draw.rect(win, darkYellow, self.position.Position(0, 0, 25, 25))
+            if not self.blockEaten:
+
+                pygame.draw.rect(win, darkYellow, self.position.Position(2, 2, 21, 21))
+
+            else:
+
+                if self.snake[0].position.x < self.position.x:
+
+                    pygame.draw.rect(win, darkYellow, self.position.Position(0, 2, 23, 21))
+
+                if self.snake[0].position.x > self.position.x:
+
+                    pygame.draw.rect(win, darkYellow, self.position.Position(2, 2, 23, 21))
+
+                if self.snake[0].position.y < self.position.y:
+
+                    pygame.draw.rect(win, darkYellow, self.position.Position(2, 0, 21, 23))
+
+                if self.snake[0].position.y > self.position.y:
+
+                    pygame.draw.rect(win, darkYellow, self.position.Position(2, 2, 21, 23))
 
             pygame.display.set_caption("Score:{}".format(self.score))
 
@@ -182,6 +202,7 @@ while True:
                         if not snake.blockEaten:
 
                             snake.snake[-1].neighbours.append(snake)
+                            snake.snake[-2].neighbours.append(snake.snake[-1])
 
                         else:
 
@@ -189,9 +210,11 @@ while True:
 
                         snake.snake.append(SnakeBlock())
                         snake.snake[-1].neighbours.append(snake.snake[-2])
+                        snake.snake[-2].neighbours.append(snake.snake[-1])
 
                         snake.snake.append(SnakeBlock())
                         snake.snake[-1].neighbours.append(snake.snake[-2])
+                        snake.snake[-2].neighbours.append(snake.snake[-1])
 
                     else:
 
@@ -206,6 +229,7 @@ while True:
                         else:
 
                             snake.snake[-1].neighbours.append(snake.snake[-2])
+                            snake.snake[-2].neighbours.append(snake.snake[-1])
 
                     snake.blockEaten = True
                     self.poweredUP = False
