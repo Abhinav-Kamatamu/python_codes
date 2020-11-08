@@ -86,6 +86,8 @@ while restart:
             if particles[particlesCounted].team == 3:
                 yellowScore += 1
 
+            particlesCounted += 1
+
         pygame.diplay.set_caption(f"RED:{redScore} GREEN:{greenScore} BLUE:{blueScore} YELLOW:{yellowScore}")
 
 
