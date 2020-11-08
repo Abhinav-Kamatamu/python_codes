@@ -80,13 +80,13 @@ while restart:
 
                     tempParticles.append( Particle(particles[particlesChecked].position.x + random.randint(-4,4), particles[particlesChecked].position.y + random.randint(-4,4), particles[particlesChecked].team))
 
-                if (particles[particlesChecked].position.x == particles[partilcesReacted].position.x) and (particles[particlesChecked].position.y == particles[partilcesReacted].position.y) and particles[particlesChecked].team != particles[particlesChecked].team and scores[particles[particlesChecked].team] > scores [particles[particlesReacted.team]]:
+                if (particles[particlesChecked].position.x == particles[particlesReacted].position.x) and (particles[particlesChecked].position.y == particles[particlesReacted].position.y) and particles[particlesChecked].team != particles[particlesChecked].team and scores[particles[particlesChecked].team] > scores [particles[particlesReacted.team]]:
 
                     del(particles[particlesReacted])
 
                 particlesReacted += 1
 
-           particlesChecked += 1
+            particlesChecked += 1
 
     def UpdateCaption():
 
@@ -152,6 +152,8 @@ while restart:
         global restart
 
         clock.tick(70000)
+
+        CheckReaction()
 
         redrawWindowScreen()
         pygame.display.update()
