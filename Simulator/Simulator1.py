@@ -11,7 +11,6 @@ while restart:
 
     clock = pygame.time.Clock()
 
-    pause = False
     restart = False
 
     width = 600
@@ -64,6 +63,32 @@ while restart:
             if self.position.y + self.velocity.y > 0 or self.position.y + self.velocity.y < 598:
                 self.position.y += self.velocity.y
 
+
+    def UpdateCaption():
+
+        global particles
+
+        redScore = 0
+        blueScore = 0
+        greenScore = 0
+        yellowScore = 0
+
+        particlesCounted = 0
+
+        while particlesCounted < len(particles):
+
+            if particles[particlesCounted].team == 0:
+                redScore += 1
+            if particles[particlesCounted].team == 1:
+                greenScore += 1
+            if particles[particlesCounted].team == 2:
+                blueScore += 1
+            if particles[particlesCounted].team == 3:
+                yellowScore += 1
+
+        pygame.diplay.set_caption(f"RED:{redScore} GREEN:{greenScore} BLUE:{blueScore} YELLOW:{yellowScore}")
+
+
     def Initiate():
 
         global particles
@@ -74,7 +99,7 @@ while restart:
 
             praticlesInstantiated = 0
 
-            while praticlesInstantiated < 200:
+            while praticlesInstantiated < 300:
 
                 particles.append(Particle(random.randint(0, 598), random.randint(0, 598), teamNum))
 
@@ -82,6 +107,7 @@ while restart:
 
             teamNum += 1
 
+        UpdateCaption()
 
     Initiate()
 
@@ -102,35 +128,29 @@ while restart:
 
     def main():
 
-        global restart, pause
+        global restart
 
-        if not pause:
+        clock.tick(144)
 
-            clock.tick(144)
+        redrawWindowScreen()
+        pygame.display.update()
 
-            redrawWindowScreen()
-            pygame.display.update()
+        keys = pygame.key.get_pressed()
 
-            keys = pygame.key.get_pressed()
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-            if keys[K_SPACE]:
-
-                pause = True
-
-            if keys[K_ESCAPE]:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-            if keys[pygame.K_RETURN]:
-                restart = True
-                pause = True
+        if keys[K_ESCAPE]:
+            pygame.quit()
+            sys.exit()
 
-        if keys[K_SPACE]:
-            pause = False
+        if keys[pygame.K_RETURN]:
+            restart = True
+            pause = True
+
+    while not restart:
 
         main()
+
