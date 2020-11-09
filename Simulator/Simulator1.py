@@ -60,8 +60,8 @@ while restart:
 
         def Move(self):
 
-            self.velocity.x += random.randint(-1,1) * (random.random() ** 3)
-            self.velocity.y += random.randint(-1,1) * (random.random() ** 3)
+            self.velocity.x = random.randint(-1,1) * (random.random() ** 3)
+            self.velocity.y = random.randint(-1,1) * (random.random() ** 3)
 
             if 0 < self.position.x + self.velocity.x < height - 2:
                 self.position.x += self.velocity.x
@@ -163,7 +163,7 @@ while restart:
 
         teamNum = 0
 
-        pygame.display.set_caption(("SIMULATION"))
+        pygame.display.set_caption("SIMULATION")
 
         init()
 
