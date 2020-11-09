@@ -27,8 +27,7 @@ def redraw():
     textrect.topleft = (30,230)
     win.blit(text, textrect)
     '''
-    image =  pygame.image.load('simulate.png')
-    image = pygame.transform.scale(image, (700, 600))
+    image =  pygame.image.load('simulation.png')
     win.blit(image, (0,0))
 
 init()

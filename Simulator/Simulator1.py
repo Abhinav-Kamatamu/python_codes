@@ -144,11 +144,8 @@ while restart:
     def redraw():
 
         win.fill((0, 0, 0))
-        _type_ = pygame.font.Font('freesansbold.ttf', 100)
-        text = _type_.render('Simulation', True, (255, 0, 0))
-        textrect = text.get_rect()
-        textrect.topleft = (30, 230)
-        win.blit(text, textrect)
+        image = pygame.image.load('simulation.png')
+        win.blit(image, (0, 0))
 
     def init():
 
@@ -163,7 +160,7 @@ while restart:
         fade = pygame.Surface((600, 600))
         fade.fill((255, 255, 255))
 
-        for alpha in range(0, 100):
+        for alpha in range(0, 50):
             fade.set_alpha(alpha)
             win.blit(fade, (0, 0))
             pygame.display.update()
@@ -178,7 +175,7 @@ while restart:
 
         pygame.display.set_caption("SIMULATION")
 
-        #init()
+        init()
 
         while teamNum < 4:
 
