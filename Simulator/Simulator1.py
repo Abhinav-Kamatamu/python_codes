@@ -29,33 +29,21 @@ while restart:
                     200, 200, 0
                  ]
 
-    # _00 = [], _01 = [], _02 = [], _03 = [], _04 = [], _05 = []
-    # _10 = [], _11 = [], _12 = [], _13 = [], _14 = [], _15 = []
-    # _20 = [], _21 = [], _22 = [], _23 = [], _24 = [], _25 = []
-    # _30 = [], _31 = [], _32 = [], _33 = [], _34 = [], _35 = []
-    # _40 = [], _41 = [], _42 = [], _43 = [], _44 = [], _45 = []
-    # _50 = [], _51 = [], _52 = [], _53 = [], _54 = [], _55 = []
-
-    # chunks = [
-    #
-    #     _00, _01, _02, _03, _04, _05,
-    #     _10, _11, _12, _13, _14, _15,
-    #     _20, _21, _22, _23, _24, _25,
-    #     _30, _31, _32, _33, _34, _35,
-    #     _40, _41, _42, _43, _44, _45,
-    #     _50, _51, _52, _53, _54, _55,
-    #
-    # ]
-
-    _1 = []
-    _2 = []
-    _3 = []
-    _4 = []
+    _00, _01, _02, _03, _04, _05 = [], [], [], [], [], []
+    _10, _11, _12, _13, _14, _15 = [], [], [], [], [], []
+    _20, _21, _22, _23, _24, _25 = [], [], [], [], [], []
+    _30, _31, _32, _33, _34, _35 = [], [], [], [], [], []
+    _40, _41, _42, _43, _44, _45 = [], [], [], [], [], []
+    _50, _51, _52, _53, _54, _55 = [], [], [], [], [], []
 
     chunks = [
 
-        _1, _2,
-        _3, _4
+        _00, _01, _02, _03, _04, _05,
+        _10, _11, _12, _13, _14, _15,
+        _20, _21, _22, _23, _24, _25,
+        _30, _31, _32, _33, _34, _35,
+        _40, _41, _42, _43, _44, _45,
+        _50, _51, _52, _53, _54, _55,
 
     ]
 
@@ -84,6 +72,7 @@ while restart:
             self.team = teamNo
             self.color = (teamColors[3 * teamNo], teamColors[3 * teamNo + 1], teamColors[3 * teamNo + 2])
             self.chunk = None
+            self.chunkIndex = None
 
         def DrawParticle(self):
 
@@ -95,15 +84,15 @@ while restart:
 
             if self.chunk is not None:
 
-                self.chunk[chunkIndex].remove(self)
+                self.chunk[self.chunkIndex].remove(self)
 
-            chunkX = int(self.position.x // 300)
-            chunkY = int(self.position.y // 300)
+            chunkX = int(self.position.x // width/sqrt(len(chunks)))
+            chunkY = int(self.position.y // height/sqrt(len(chunks)))
 
-            chunkIndex = chunkY * 2 + chunkX
+            self.self.chunkIndex = chunkY * 6 + chunkX
 
-            self.chunk = chunks[chunkIndex]
-            chunks[chunkIndex].append(self)
+            self.chunk = chunks[self.chunkIndex]
+            chunks[self.chunkIndex].append(self)
 
         def Move(self):
 
@@ -142,41 +131,23 @@ while restart:
 
     def CheckReaction():
 
-        chunksReacted = 0
+        global chunks
 
-        while chunksReacted < len(chunks[chunksReacted]):
-
-            particlesChecked = 0
-
-            while particlesChecked < len(chunks[chunksReacted]):
-
-                particlesReacted = 0
-
-                while particlesReacted < len(chunks[chunksReacted]):
-
-                    if (chunks[chunksReacted][particlesChecked].team == chunks[chunksReacted][particlesReacted].team and (-4 < chunks[chunksReacted][particlesChecked].position.x - chunks[chunksReacted][particlesReacted].position.x < 4 and -4 < chunks[chunksReacted][particlesChecked].position.y - chunks[chunksReacted][particlesReacted].position.y < 4)) and (particlesReacted != particlesChecked):
-
-                        chunks[chunksReacted].append( Particle(chunks[chunksReacted][particlesChecked].position.x + random.randint(-200,200), chunks[chunksReacted][particlesChecked].position.y + random.randint(-200,200), chunks[chunksReacted][particlesChecked].team ))
-
-                    if (chunks[chunksReacted][particlesChecked].position.x == chunks[chunksReacted][particlesReacted].position.x) and (chunks[chunksReacted][particlesChecked].position.y == chunks[chunksReacted][particlesReacted].position.y) and chunks[chunksReacted][particlesChecked].team != chunks[chunksReacted][particlesChecked].team and scores[chunks[chunksReacted][particlesChecked].team] > scores [particles[particlesReacted.team]]:
-
-                        del(chunks[chunksReacted][particlesReacted])
-                        pop(chunks[chunksReacted][particlesReacted])
-
-                    particlesReacted += 1
-
-                particlesChecked += 1
-
-            chunksReacted += 1
+        #I'm reworking on this
+        #I have succefully calculated the chunk of each particles now
+        #So i hope it should work
 
         UpdateCaption()
 
 
     def redraw():
+
         win.fill((0, 0, 0))
-        image = pygame.image.load('simulate.png')
-        image = pygame.transform.scale(image, (700, 600))
-        win.blit(image, (0, 0))
+        _type_ = pygame.font.Font('freesansbold.ttf', 100)
+        text = _type_.render('Simulation', True, (255, 0, 0))
+        textrect = text.get_rect()
+        textrect.topleft = (30, 230)
+        win.blit(text, textrect)
 
     def init():
 
