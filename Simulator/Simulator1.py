@@ -71,6 +71,8 @@ while restart:
 
         particlesCounted = 0
 
+        scores = [0, 0, 0, 0]
+
         while particlesCounted < len(particles):
 
             if particles[particlesCounted].team == 0:
