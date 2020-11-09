@@ -21,9 +21,9 @@ while restart:
 
     teamColors = [
                     255, 0, 0,
-                    0, 255, 0,
+                    0, 150, 0,
                     0, 0, 255,
-                    255, 255, 0
+                    200, 200, 0
                  ]
 
     white = (255, 255, 255)
@@ -97,11 +97,16 @@ while restart:
 
         while particlesChecked < len(particles):
 
+            print(particlesChecked)
+
             while particlesReacted < len(particles):
+
+                print(particlesChecked, ": )")
 
                 if (particles[particlesChecked].team == particles[particlesReacted].team and (-4 < particles[particlesChecked].position.x - particles[particlesReacted].position.x < 4 and -4 < particles[particlesChecked].position.y - particles[particlesReacted].position.y < 4)) and (particlesReacted != particlesChecked):
 
                     tempParticles.append( Particle(particles[particlesChecked].position.x + random.randint(-200,200), particles[particlesChecked].position.y + random.randint(-200,200), particles[particlesChecked].team))
+                    print(particles[particlesChecked].team)
 
                 if (particles[particlesChecked].position.x == particles[particlesReacted].position.x) and (particles[particlesChecked].position.y == particles[particlesReacted].position.y) and particles[particlesChecked].team != particles[particlesChecked].team and scores[particles[particlesChecked].team] > scores [particles[particlesReacted.team]]:
 
