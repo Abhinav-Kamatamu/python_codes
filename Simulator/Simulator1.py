@@ -101,14 +101,12 @@ while restart:
 
                 if (particles[particlesChecked].team == particles[particlesReacted].team and (-4 < particles[particlesChecked].position.x - particles[particlesReacted].position.x < 4 and -4 < particles[particlesChecked].position.y - particles[particlesReacted].position.y < 4)) and (particlesReacted != particlesChecked):
 
-                    tempParticles.append( Particle(particles[particlesChecked].position.x + random.randint(-100,100), particles[particlesChecked].position.y + random.randint(-100,100), particles[particlesChecked].team))
-                    UpdateCaption()
+                    tempParticles.append( Particle(particles[particlesChecked].position.x + random.randint(-200,200), particles[particlesChecked].position.y + random.randint(-200,200), particles[particlesChecked].team))
 
                 if (particles[particlesChecked].position.x == particles[particlesReacted].position.x) and (particles[particlesChecked].position.y == particles[particlesReacted].position.y) and particles[particlesChecked].team != particles[particlesChecked].team and scores[particles[particlesChecked].team] > scores [particles[particlesReacted.team]]:
 
                     del(particles[particlesReacted])
                     pop(particles[particlesReacted])
-                    UpdateCaption()
 
                 particlesReacted += 1
 
@@ -123,6 +121,7 @@ while restart:
 
             particlesAdded += 1
 
+        UpdateCaption()
 
     def Initiate():
 

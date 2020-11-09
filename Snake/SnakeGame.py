@@ -34,7 +34,7 @@ while True:
 
             i = 0
 
-            while i < 2:
+            while i < len(self.neighbours):
 
 
                 if self.neighbours[i].position.x < self.position.x:
