@@ -29,6 +29,24 @@ while restart:
                     200, 200, 0
                  ]
 
+    _00 = [], _01 = [], _02 = [], _03 = [], _04 = [], _05 = []
+    _10 = [], _11 = [], _12 = [], _13 = [], _14 = [], _15 = []
+    _20 = [], _21 = [], _22 = [], _23 = [], _24 = [], _25 = []
+    _30 = [], _31 = [], _32 = [], _33 = [], _34 = [], _35 = []
+    _40 = [], _41 = [], _42 = [], _43 = [], _44 = [], _45 = []
+    _50 = [], _51 = [], _52 = [], _53 = [], _54 = [], _55 = []
+
+    chunks = [
+
+        _00, _01, _02, _03, _04, _05,
+        _10, _11, _12, _13, _14, _15,
+        _20, _21, _22, _23, _24, _25,
+        _30, _31, _32, _33, _34, _35,
+        _40, _41, _42, _43, _44, _45,
+        _50, _51, _52, _53, _54, _55,
+
+    ]
+
     white = (255, 255, 255)
 
     win = pygame.display.set_mode((width, height))
@@ -53,10 +71,22 @@ while restart:
             self.velocity = Coordinate (0 ,0)
             self.team = teamNo
             self.color = (teamColors[3 * teamNo], teamColors[3 * teamNo + 1], teamColors[3 * teamNo + 2])
+            self.chunk = None
 
         def DrawParticle(self):
 
             pygame.draw.rect(win, self.color, self.position.rect())
+
+        def UpdateChunk(self):
+
+            global chunks
+
+            chunkX = self.position.x // 100
+            chunkY = self.position.y // 100
+
+            chunkIndex = chunkY * 6 + (chunkX + 2)
+
+            self.chunk = chunks[chunkIndex]
 
         def Move(self):
 
@@ -67,6 +97,8 @@ while restart:
                 self.position.x += self.velocity.x
             if 0 < self.position.y + self.velocity.y < height - 2:
                 self.position.y += self.velocity.y
+
+            self.UpdateChunk()
 
     def UpdateCaption():
 
@@ -204,7 +236,7 @@ while restart:
 
         clock.tick(70000)
 
-        #CheckReaction()
+        CheckReaction()
 
         redrawWindowScreen()
         pygame.display.update()
