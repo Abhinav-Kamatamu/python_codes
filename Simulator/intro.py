@@ -20,10 +20,15 @@ def init():
 
 def redraw():
     win.fill((0, 0, 0))
+    '''
     _type_ = pygame.font.Font('freesansbold.ttf', 100)
     text = _type_.render('Simulation', True, (255,0,0))
     textrect = text.get_rect()
     textrect.topleft = (30,230)
     win.blit(text, textrect)
+    '''
+    image =  pygame.image.load('simulate.png')
+    image = pygame.transform.scale(image, (700, 600))
+    win.blit(image, (0,0))
 
 init()
