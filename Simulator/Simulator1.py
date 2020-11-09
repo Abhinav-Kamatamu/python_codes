@@ -65,29 +65,6 @@ while restart:
             if 0 < self.position.y + self.velocity.y < height - 2:
                 self.position.y += self.velocity.y
 
-    def CheckReaction():
-
-        global particles, tempParticles
-
-        particlesChecked = 0
-        particlesReacted = 0
-
-        while particlesChecked < len(particles):
-
-            while particlesReacted < len(particles):
-
-                if (particles[particlesChecked].team == particles[particlesReacted].team and (-4 < particles[particlesChecked].position.x - particles[particlesReacted].position.x < 4 and -4 < particles[particlesChecked].position.y - particles[particlesReacted].position.y < 4)) and (particlesReacted != particlesChecked):
-
-                    tempParticles.append( Particle(particles[particlesChecked].position.x + random.randint(-4,4), particles[particlesChecked].position.y + random.randint(-4,4), particles[particlesChecked].team))
-
-                if (particles[particlesChecked].position.x == particles[particlesReacted].position.x) and (particles[particlesChecked].position.y == particles[particlesReacted].position.y) and particles[particlesChecked].team != particles[particlesChecked].team and scores[particles[particlesChecked].team] > scores [particles[particlesReacted.team]]:
-
-                    del(particles[particlesReacted])
-
-                particlesReacted += 1
-
-            particlesChecked += 1
-
     def UpdateCaption():
 
         global particles
@@ -108,6 +85,41 @@ while restart:
             particlesCounted += 1
 
         pygame.display.set_caption(f"RED:{scores[0]}   GREEN:{scores[1]}   BLUE:{scores[2]}   YELLOW:{scores[3]}")
+
+    def CheckReaction():
+
+        global particles, tempParticles
+
+        particlesChecked = 0
+        particlesReacted = 0
+
+        while particlesChecked < len(particles):
+
+            while particlesReacted < len(particles):
+
+                if (particles[particlesChecked].team == particles[particlesReacted].team and (-4 < particles[particlesChecked].position.x - particles[particlesReacted].position.x < 4 and -4 < particles[particlesChecked].position.y - particles[particlesReacted].position.y < 4)) and (particlesReacted != particlesChecked):
+
+                    tempParticles.append( Particle(particles[particlesChecked].position.x + random.randint(-100,100), particles[particlesChecked].position.y + random.randint(-100,100), particles[particlesChecked].team))
+                    UpdateCaption()
+
+                if (particles[particlesChecked].position.x == particles[particlesReacted].position.x) and (particles[particlesChecked].position.y == particles[particlesReacted].position.y) and particles[particlesChecked].team != particles[particlesChecked].team and scores[particles[particlesChecked].team] > scores [particles[particlesReacted.team]]:
+
+                    del(particles[particlesReacted])
+                    pop(particles[particlesReacted])
+                    UpdateCaption()
+
+                particlesReacted += 1
+
+            particlesChecked += 1
+
+        particlesAdded = 0
+
+        while particlesAdded < len(tempParticles):
+
+            particles.append(tempParticles[particlesAdded])
+            del(tempParticles[particlesAdded])
+
+            particlesAdded += 1
 
 
     def Initiate():
