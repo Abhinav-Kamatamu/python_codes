@@ -1,8 +1,7 @@
 import pygame,time
+
 pygame.init()
 win = pygame.display.set_mode((600,600))
-
-
 
 def init():
     global win
@@ -18,8 +17,6 @@ def init():
         pygame.display.update()
         pygame.time.delay(30)
         pygame.display.update()
-
-
 
 def redraw():
     win.fill((0, 0, 0))
