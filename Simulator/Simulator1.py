@@ -29,21 +29,33 @@ while restart:
                     200, 200, 0
                  ]
 
-    _00 = [], _01 = [], _02 = [], _03 = [], _04 = [], _05 = []
-    _10 = [], _11 = [], _12 = [], _13 = [], _14 = [], _15 = []
-    _20 = [], _21 = [], _22 = [], _23 = [], _24 = [], _25 = []
-    _30 = [], _31 = [], _32 = [], _33 = [], _34 = [], _35 = []
-    _40 = [], _41 = [], _42 = [], _43 = [], _44 = [], _45 = []
-    _50 = [], _51 = [], _52 = [], _53 = [], _54 = [], _55 = []
+    # _00 = [], _01 = [], _02 = [], _03 = [], _04 = [], _05 = []
+    # _10 = [], _11 = [], _12 = [], _13 = [], _14 = [], _15 = []
+    # _20 = [], _21 = [], _22 = [], _23 = [], _24 = [], _25 = []
+    # _30 = [], _31 = [], _32 = [], _33 = [], _34 = [], _35 = []
+    # _40 = [], _41 = [], _42 = [], _43 = [], _44 = [], _45 = []
+    # _50 = [], _51 = [], _52 = [], _53 = [], _54 = [], _55 = []
+
+    # chunks = [
+    #
+    #     _00, _01, _02, _03, _04, _05,
+    #     _10, _11, _12, _13, _14, _15,
+    #     _20, _21, _22, _23, _24, _25,
+    #     _30, _31, _32, _33, _34, _35,
+    #     _40, _41, _42, _43, _44, _45,
+    #     _50, _51, _52, _53, _54, _55,
+    #
+    # ]
+
+    _1 = []
+    _2 = []
+    _3 = []
+    _4 = []
 
     chunks = [
 
-        _00, _01, _02, _03, _04, _05,
-        _10, _11, _12, _13, _14, _15,
-        _20, _21, _22, _23, _24, _25,
-        _30, _31, _32, _33, _34, _35,
-        _40, _41, _42, _43, _44, _45,
-        _50, _51, _52, _53, _54, _55,
+        _1, _2,
+        _3, _4
 
     ]
 
@@ -81,12 +93,17 @@ while restart:
 
             global chunks
 
-            chunkX = self.position.x // 100
-            chunkY = self.position.y // 100
+            if self.chunk is not None:
 
-            chunkIndex = chunkY * 6 + (chunkX + 2)
+                self.chunk[chunkindex].remove(self)
+
+            chunkX = int(self.position.x // 300)
+            chunkY = int(self.position.y // 300)
+
+            chunkIndex = chunkY * 2 + chunkX
 
             self.chunk = chunks[chunkIndex]
+            chunks[chunkIndex].append(self)
 
         def Move(self):
 
@@ -125,37 +142,32 @@ while restart:
 
     def CheckReaction():
 
-        global particles, tempParticles
+        chunksReacted = 0
 
-        particlesChecked = 0
+        while chunksReacted < len(chunks[chunksReacted]):
 
-        while particlesChecked < len(particles):
+            particlesChecked = 0
 
-            particlesReacted = 0
+            while particlesChecked < len(chunks[chunksReacted]):
 
-            while particlesReacted < len(particles):
+                particlesReacted = 0
 
-                if (particles[particlesChecked].team == particles[particlesReacted].team and (-4 < particles[particlesChecked].position.x - particles[particlesReacted].position.x < 4 and -4 < particles[particlesChecked].position.y - particles[particlesReacted].position.y < 4)) and (particlesReacted != particlesChecked):
+                while particlesReacted < len(chunks[chunksReacted]):
 
-                    tempParticles.append( Particle(particles[particlesChecked].position.x + random.randint(-200,200), particles[particlesChecked].position.y + random.randint(-200,200), particles[particlesChecked].team ))
+                    if (chunks[chunksReacted][particlesChecked].team == chunks[chunksReacted][particlesReacted].team and (-4 < chunks[chunksReacted][particlesChecked].position.x - chunks[chunksReacted][particlesReacted].position.x < 4 and -4 < chunks[chunksReacted][particlesChecked].position.y - chunks[chunksReacted][particlesReacted].position.y < 4)) and (particlesReacted != particlesChecked):
 
-                if (particles[particlesChecked].position.x == particles[particlesReacted].position.x) and (particles[particlesChecked].position.y == particles[particlesReacted].position.y) and particles[particlesChecked].team != particles[particlesChecked].team and scores[particles[particlesChecked].team] > scores [particles[particlesReacted.team]]:
+                        chunks[chunksReacted].append( Particle(chunks[chunksReacted][particlesChecked].position.x + random.randint(-200,200), chunks[chunksReacted][particlesChecked].position.y + random.randint(-200,200), chunks[chunksReacted][particlesChecked].team ))
 
-                    del(particles[particlesReacted])
-                    pop(particles[particlesReacted])
+                    if (chunks[chunksReacted][particlesChecked].position.x == chunks[chunksReacted][particlesReacted].position.x) and (chunks[chunksReacted][particlesChecked].position.y == chunks[chunksReacted][particlesReacted].position.y) and chunks[chunksReacted][particlesChecked].team != chunks[chunksReacted][particlesChecked].team and scores[chunks[chunksReacted][particlesChecked].team] > scores [particles[particlesReacted.team]]:
 
-                particlesReacted += 1
+                        del(chunks[chunksReacted][particlesReacted])
+                        pop(chunks[chunksReacted][particlesReacted])
 
-            particlesChecked += 1
+                    particlesReacted += 1
 
-        particlesAdded = 0
+                particlesChecked += 1
 
-        while particlesAdded < len(tempParticles):
-
-            particles.append(tempParticles[particlesAdded])
-            del(tempParticles[particlesAdded])
-
-            particlesAdded += 1
+            chunksReacted += 1
 
         UpdateCaption()
 
@@ -197,13 +209,13 @@ while restart:
 
         pygame.display.set_caption("SIMULATION")
 
-        init()
+        #init()
 
         while teamNum < 4:
 
             praticlesInstantiated = 0
 
-            while praticlesInstantiated < 300:
+            while praticlesInstantiated < 100:
 
                 particles.append(Particle(random.randint(0, width - 2), random.randint(0, height - 2), teamNum))
 
