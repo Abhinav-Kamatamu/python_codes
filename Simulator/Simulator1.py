@@ -95,7 +95,7 @@ while restart:
 
             if self.chunk is not None:
 
-                self.chunk[chunkindex].remove(self)
+                self.chunk[chunkIndex].remove(self)
 
             chunkX = int(self.position.x // 300)
             chunkY = int(self.position.y // 300)
