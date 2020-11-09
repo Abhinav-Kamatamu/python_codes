@@ -57,8 +57,8 @@ while restart:
 
         def Move(self):
 
-            self.velocity.x = random.randint(-1,1)
-            self.velocity.y = random.randint(-1,1)
+            self.velocity.x += random.randint(-1,1) * (random.random() ** 3)
+            self.velocity.y += random.randint(-1,1) * (random.random() ** 3)
 
             if 0 < self.position.x + self.velocity.x < height - 2:
                 self.position.x += self.velocity.x
@@ -167,7 +167,7 @@ while restart:
 
         clock.tick(70000)
 
-        CheckReaction()
+        #CheckReaction()
 
         redrawWindowScreen()
         pygame.display.update()
