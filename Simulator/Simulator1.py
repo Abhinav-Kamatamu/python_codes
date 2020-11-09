@@ -3,6 +3,7 @@ from pygame.locals import *
 import random
 import sys
 import time
+from math import *
 
 pygame.init()
 
@@ -84,12 +85,12 @@ while restart:
 
             if self.chunk is not None:
 
-                self.chunk[self.chunkIndex].remove(self)
+                self.chunk.remove(self)
 
             chunkX = int(self.position.x // width/sqrt(len(chunks)))
             chunkY = int(self.position.y // height/sqrt(len(chunks)))
 
-            self.self.chunkIndex = chunkY * 6 + chunkX
+            self.chunkIndex = chunkY * 6 + chunkX
 
             self.chunk = chunks[self.chunkIndex]
             chunks[self.chunkIndex].append(self)
