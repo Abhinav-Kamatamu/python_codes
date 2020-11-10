@@ -48,6 +48,8 @@ while restart:
 
     ]
 
+    tempParticles = []
+
     white = (255, 255, 255)
 
     win = pygame.display.set_mode((width, height))
@@ -79,16 +81,29 @@ while restart:
 
             pygame.draw.rect(win, self.color, self.position.rect())
 
+        def ClampPos(self):
+
+            if self.position.x < 0:
+                self.position.x = 0
+            if self. position.x > (width - 2):
+                self.position.x = (width - 2)
+            if self.position.y < 0:
+                self.position.y = 0
+            if self. position.y > (height - 2):
+                self.position.y = (height - 2)
+
         def UpdateChunk(self):
 
             global chunks
+
+            self.ClampPos()
 
             if self.chunk is not None:
 
                 self.chunk.remove(self)
 
-            chunkX = int(self.position.x // width/sqrt(len(chunks)))
-            chunkY = int(self.position.y // height/sqrt(len(chunks)))
+            chunkX = int(self.position.x // 100)
+            chunkY = int(self.position.y // 100)
 
             self.chunkIndex = chunkY * 6 + chunkX
 
@@ -132,11 +147,39 @@ while restart:
 
     def CheckReaction():
 
-        global chunks
+        global chunks, width, height, tempParticles
 
-        #I'm reworking on this
-        #I have succefully calculated the chunk of each particles now
-        #So i hope it should work
+        i = 0
+
+        while i < len(chunks):
+
+            j = 0
+
+            while j < len(chunks[i]):
+
+                k = 0
+
+                while k < len(chunks[i]):
+
+                    if ((-4 < (chunks[i][j].position.x - chunks[i][k].position.x) < 4) and (-4 < (chunks[i][j].position.y - chunks[i][k].position.y) < 4)) and (chunks[i][j].team == chunks[i][k].team):
+
+                        tempParticles.append(Particle(chunks[i][j].position.x + random.randint(-100,100),chunks[i][j].position.y + random.randint(-100,100), chunks[i][j].team))
+
+                    k += 1
+
+                j += 1
+
+            i += 1
+
+        a = 0
+
+        while a < len(tempParticles):
+
+            tempParticles[a].UpdateChunk()
+            chunks[tempParticles[a].chunkIndex].append(tempParticles[a])
+            tempParticles.pop(0)
+
+            a += 1
 
         UpdateCaption()
 
@@ -144,6 +187,7 @@ while restart:
     def redraw():
 
         win.fill((0, 0, 0))
+
         image = pygame.image.load('simulation.png')
         win.blit(image, (0, 0))
 
@@ -175,7 +219,7 @@ while restart:
 
         pygame.display.set_caption("SIMULATION")
 
-        init()
+        #init()
 
         while teamNum < 4:
 
@@ -208,13 +252,14 @@ while restart:
 
             particlesDrawn += 1
 
+
     def main():
 
         global restart
 
         clock.tick(70000)
 
-        CheckReaction()
+        #CheckReaction()
 
         redrawWindowScreen()
         pygame.display.update()
