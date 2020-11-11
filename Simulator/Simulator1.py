@@ -261,7 +261,7 @@ while restart:
 
         clock.tick(70000)
 
-        CheckReaction()
+        #CheckReaction()
 
         redrawWindowScreen()
         pygame.display.update()
