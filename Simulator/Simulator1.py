@@ -84,13 +84,13 @@ while restart:
         def ClampPos(self):
 
             if self.position.x < 0:
-                self.position.x = 0
+                self.position.x = 0 + random.randint(0,10)
             if self. position.x > (width - 2):
-                self.position.x = (width - 2)
+                self.position.x = (width - random.randint(2,12))
             if self.position.y < 0:
-                self.position.y = 0
+                self.position.y = 0 + random.randint(0,10)
             if self. position.y > (height - 2):
-                self.position.y = (height - 2)
+                self.position.y = (height - (random.randint(2,12)))
 
         def UpdateChunk(self):
 
@@ -154,16 +154,20 @@ while restart:
         while i < len(chunks):
 
             j = 0
+            currentChunk = chunks[i]
 
-            while j < len(chunks[i]):
+            while j < len(currentChunk):
 
                 k = 0
+                currentParticle = currentChunk[j]
 
                 while k < len(chunks[i]):
 
-                    if ((-4 < (chunks[i][j].position.x - chunks[i][k].position.x) < 4) and (-4 < (chunks[i][j].position.y - chunks[i][k].position.y) < 4)) and (chunks[i][j].team == chunks[i][k].team):
+                    currentReactant = currentChunk[k]
 
-                        tempParticles.append(Particle(chunks[i][j].position.x + random.randint(-100,100),chunks[i][j].position.y + random.randint(-100,100), chunks[i][j].team))
+                    if (-1 < (currentParticle.position.x - currentReactant.position.x) < 1) and (-1 < (currentParticle.position.y - currentReactant.position.y) < 1) and (currentParticle.team == currentReactant.team) and (j != k):
+
+                        tempParticles.append(Particle(currentParticle.position.x + random.randint(100,100),currentParticle.position.y + random.randint(100,100),currentParticle.team))
 
                     k += 1
 
@@ -171,15 +175,13 @@ while restart:
 
             i += 1
 
-        a = 0
+        while len(tempParticles) > 0:
 
-        while a < len(tempParticles):
-
-            tempParticles[a].UpdateChunk()
-            chunks[tempParticles[a].chunkIndex].append(tempParticles[a])
+            tempParticles[0].UpdateChunk()
+            chunks[tempParticles[0].chunkIndex].append(tempParticles[0])
             tempParticles.pop(0)
 
-            a += 1
+        print(len(tempParticles))
 
         UpdateCaption()
 
@@ -259,7 +261,7 @@ while restart:
 
         clock.tick(70000)
 
-        #CheckReaction()
+        CheckReaction()
 
         redrawWindowScreen()
         pygame.display.update()
