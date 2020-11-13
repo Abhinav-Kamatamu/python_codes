@@ -177,17 +177,31 @@ while restart:
 
                 while k < len(chunks[i]):
 
+                    l = 0
                     currentReactant = currentChunk[k]
 
-                    if (-1 < (currentParticle.position.x - currentReactant.position.x) < 1) and (-1 < (currentParticle.position.y - currentReactant.position.y) < 1) and (currentParticle.team == currentReactant.team) and (j != k) and (not currentParticle.reacted and not currentReactant.reacted):
+                    if (-1 < (currentParticle.position.x - currentReactant.position.x) < 1) and (-1 < (currentParticle.position.y - currentReactant.position.y) < 1) and (currentParticle.team == currentReactant.team) and (j != k):
 
-                        tempParticles.append(Particle(currentParticle.position.x + random.randint(-100,100),currentParticle.position.y + random.randint(-100,100),currentParticle.team))
+                        if not currentParticle.reacted and not currentReactant.reacted:
 
-                        currentParticle.reacted = True
-                        currentReactant.reacted = True
+                            tempParticles.append(Particle(currentParticle.position.x + random.randint(-100,100),currentParticle.position.y + random.randint(-100,100),currentParticle.team))
 
-                        currentParticle.cooldown = 1000
-                        currentParticle.cooldown = 1000
+                            currentParticle.reacted = True
+                            currentReactant.reacted = True
+
+                            currentParticle.cooldown = random.randint(1000,1500)
+                            currentParticle.cooldown = random.randint(1000,1500)
+
+                        while l < len(currentChunk):
+
+                            currentDeletant = currentChunk[l]
+
+                            if (-1 < (currentDeletant.position.x - currentReactant.position.x) < 1) and (-1 < (currentDeletant.position.y - currentReactant.position.y) < 1) and (currentDeletant.team != currentReactant.team):
+
+                                currentChunk.remove(currentDeletant)
+                                del currentDeletant
+
+                            l += 1
 
                     k += 1
 
