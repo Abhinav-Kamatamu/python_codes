@@ -29,21 +29,33 @@ while restart:
                     200, 200, 0
                  ]
 
-    _00, _01, _02, _03, _04, _05 = [], [], [], [], [], []
-    _10, _11, _12, _13, _14, _15 = [], [], [], [], [], []
-    _20, _21, _22, _23, _24, _25 = [], [], [], [], [], []
-    _30, _31, _32, _33, _34, _35 = [], [], [], [], [], []
-    _40, _41, _42, _43, _44, _45 = [], [], [], [], [], []
-    _50, _51, _52, _53, _54, _55 = [], [], [], [], [], []
+    _00, _01, _02, _03, _04, _05, _06, _07, _08, _09, _010, _011             = [], [], [], [], [], [], [], [], [], [], [], []
+    _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _110, _111             = [], [], [], [], [], [], [], [], [], [], [], []
+    _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _210, _211             = [], [], [], [], [], [], [], [], [], [], [], []
+    _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _310, _311             = [], [], [], [], [], [], [], [], [], [], [], []
+    _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _410, _411             = [], [], [], [], [], [], [], [], [], [], [], []
+    _50, _51, _52, _53, _54, _55, _56, _57, _58, _59, _510, _511             = [], [], [], [], [], [], [], [], [], [], [], []
+    _60, _61, _62, _63, _64, _65, _66, _67, _68, _69, _610, _611             = [], [], [], [], [], [], [], [], [], [], [], []
+    _70, _71, _72, _73, _74, _75, _76, _77, _78, _79, _710, _711             = [], [], [], [], [], [], [], [], [], [], [], []
+    _80, _81, _82, _83, _84, _85, _86, _87, _88, _89, _810, _811             = [], [], [], [], [], [], [], [], [], [], [], []
+    _90, _91, _92, _93, _94, _95, _96, _97, _98, _99, _910, _911             = [], [], [], [], [], [], [], [], [], [], [], []
+    _100, _101, _102, _103, _104, _105, _106, _107, _108, _109, _1010, _1011 = [], [], [], [], [], [], [], [], [], [], [], []
+    _110, _111, _112, _113, _114, _115, _116, _117, _118, _119, _1110, _1111 = [], [], [], [], [], [], [], [], [], [], [], []
 
     chunks = [
 
-        _00, _01, _02, _03, _04, _05,
-        _10, _11, _12, _13, _14, _15,
-        _20, _21, _22, _23, _24, _25,
-        _30, _31, _32, _33, _34, _35,
-        _40, _41, _42, _43, _44, _45,
-        _50, _51, _52, _53, _54, _55,
+    _00, _01, _02, _03, _04, _05, _06, _07, _08, _09, _010, _011,
+    _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _110, _111,
+    _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _210, _211,
+    _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _310, _311,
+    _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _410, _411,
+    _50, _51, _52, _53, _54, _55, _56, _57, _58, _59, _510, _511,
+    _60, _61, _62, _63, _64, _65, _66, _67, _68, _69, _610, _611,
+    _70, _71, _72, _73, _74, _75, _76, _77, _78, _79, _710, _711,
+    _80, _81, _82, _83, _84, _85, _86, _87, _88, _89, _810, _811,
+    _90, _91, _92, _93, _94, _95, _96, _97, _98, _99, _910, _911,
+    _100, _101, _102, _103, _104, _105, _106, _107, _108, _109, _1010, _1011,
+    _110, _111, _112, _113, _114, _115, _116, _117, _118, _119, _1110, _1111,
 
     ]
 
@@ -99,14 +111,14 @@ while restart:
 
             self.ClampPos()
 
-            if self.chunk is not None:
+            if self.chunk is not None and self in self.chunk:
 
                 self.chunk.remove(self)
 
-            chunkX = int(self.position.x // 100)
-            chunkY = int(self.position.y // 100)
+            chunkX = int(self.position.x // 50)
+            chunkY = int(self.position.y // 50)
 
-            self.chunkIndex = chunkY * 6 + chunkX
+            self.chunkIndex = chunkY * 12 + chunkX
 
             self.chunk = chunks[self.chunkIndex]
             chunks[self.chunkIndex].append(self)
@@ -126,8 +138,6 @@ while restart:
             if self.cooldown <= 0:
 
                 self.reacted = False
-
-            self.UpdateChunk()
 
     def UpdateCaption():
 
@@ -189,8 +199,8 @@ while restart:
                             currentParticle.reacted = True
                             currentReactant.reacted = True
 
-                            currentParticle.cooldown = random.randint(1000,1500)
-                            currentParticle.cooldown = random.randint(1000,1500)
+                            currentParticle.cooldown = random.randint(1000000,1500000)
+                            currentParticle.cooldown = random.randint(1000000,1500000)
 
                         while l < len(currentChunk):
 
@@ -198,8 +208,10 @@ while restart:
 
                             if (-1 < (currentDeletant.position.x - currentReactant.position.x) < 1) and (-1 < (currentDeletant.position.y - currentReactant.position.y) < 1) and (currentDeletant.team != currentReactant.team):
 
-                                currentChunk.remove(currentDeletant)
-                                del currentDeletant
+                                if currentDeletant in currentChunk:
+
+                                    currentChunk.remove(currentDeletant)
+                                    del currentDeletant
 
                             l += 1
 
@@ -289,8 +301,22 @@ while restart:
 
             while particlesDrawn < len(currentChunk):
 
-                currentChunk[particlesDrawn].DrawParticle()
                 currentChunk[particlesDrawn].Move()
+                currentChunk[particlesDrawn].DrawParticle()
+
+                particlesDrawn += 1
+
+            i += 1
+
+        i = 0
+
+        while i < len(chunks):
+
+            particlesDrawn = 0
+
+            while particlesDrawn < len(currentChunk):
+
+                currentChunk[particlesDrawn].UpdateChunk()
 
                 particlesDrawn += 1
 
@@ -301,7 +327,7 @@ while restart:
 
         global restart
 
-        clock.tick(70000)
+        clock.tick(70)
 
         CheckReaction()
 
