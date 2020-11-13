@@ -11,7 +11,6 @@ restart = True
 
 while restart:
 
-    particles = []
     tempParticles = []
 
     clock = pygame.time.Clock()
@@ -76,6 +75,8 @@ while restart:
             self.color = (teamColors[3 * teamNo], teamColors[3 * teamNo + 1], teamColors[3 * teamNo + 2])
             self.chunk = None
             self.chunkIndex = None
+            self.reacted = True
+            self.cooldown = 0
 
         def DrawParticle(self):
 
@@ -120,28 +121,41 @@ while restart:
             if 0 < self.position.y + self.velocity.y < height - 2:
                 self.position.y += self.velocity.y
 
+            self.cooldown -= 1
+
+            if self.cooldown <= 0:
+
+                self.reacted = False
+
             self.UpdateChunk()
 
     def UpdateCaption():
 
-        global particles
-
-        particlesCounted = 0
+        global chunks
 
         scores = [0, 0, 0, 0]
 
-        while particlesCounted < len(particles):
+        i = 0
 
-            if particles[particlesCounted].team == 0:
-                scores[0] += 1
-            if particles[particlesCounted].team == 1:
-                scores[1] += 1
-            if particles[particlesCounted].team == 2:
-                scores[2] += 1
-            if particles[particlesCounted].team == 3:
-                scores[3] += 1
+        while i < len(chunks):
 
-            particlesCounted += 1
+            currentChunk = chunks[i]
+            particlesCounted = 0
+
+            while particlesCounted < len(currentChunk):
+
+                if currentChunk[particlesCounted].team == 0:
+                    scores[0] += 1
+                if currentChunk[particlesCounted].team == 1:
+                    scores[1] += 1
+                if currentChunk[particlesCounted].team == 2:
+                    scores[2] += 1
+                if currentChunk[particlesCounted].team == 3:
+                    scores[3] += 1
+
+                particlesCounted += 1
+
+            i += 1
 
         pygame.display.set_caption(f"RED:{scores[0]}   GREEN:{scores[1]}   BLUE:{scores[2]}   YELLOW:{scores[3]}")
 
@@ -165,9 +179,15 @@ while restart:
 
                     currentReactant = currentChunk[k]
 
-                    if (-1 < (currentParticle.position.x - currentReactant.position.x) < 1) and (-1 < (currentParticle.position.y - currentReactant.position.y) < 1) and (currentParticle.team == currentReactant.team) and (j != k):
+                    if (-1 < (currentParticle.position.x - currentReactant.position.x) < 1) and (-1 < (currentParticle.position.y - currentReactant.position.y) < 1) and (currentParticle.team == currentReactant.team) and (j != k) and (not currentParticle.reacted and not currentReactant.reacted):
 
-                        tempParticles.append(Particle(currentParticle.position.x + random.randint(100,100),currentParticle.position.y + random.randint(100,100),currentParticle.team))
+                        tempParticles.append(Particle(currentParticle.position.x + random.randint(-100,100),currentParticle.position.y + random.randint(-100,100),currentParticle.team))
+
+                        currentParticle.reacted = True
+                        currentReactant.reacted = True
+
+                        currentParticle.cooldown = 1000
+                        currentParticle.cooldown = 1000
 
                     k += 1
 
@@ -180,8 +200,6 @@ while restart:
             tempParticles[0].UpdateChunk()
             chunks[tempParticles[0].chunkIndex].append(tempParticles[0])
             tempParticles.pop(0)
-
-        print(len(tempParticles))
 
         UpdateCaption()
 
@@ -215,7 +233,7 @@ while restart:
 
     def Initiate():
 
-        global particles
+        global tempParticles
 
         teamNum = 0
 
@@ -229,7 +247,9 @@ while restart:
 
             while praticlesInstantiated < 100:
 
-                particles.append(Particle(random.randint(0, width - 2), random.randint(0, height - 2), teamNum))
+                tempParticles.append(Particle(random.randint(0, width - 2), random.randint(0, height - 2), teamNum))
+                tempParticles[0].UpdateChunk()
+                tempParticles.pop(0)
 
                 praticlesInstantiated += 1
 
@@ -241,18 +261,26 @@ while restart:
 
     def redrawWindowScreen():
 
-        global particles
+        global tempParticles, chunks
 
-        particlesDrawn = 0
+        i = 0
 
         win.fill(white)
 
-        while particlesDrawn < len(particles):
+        while i < len(chunks):
 
-            particles[particlesDrawn].DrawParticle()
-            particles[particlesDrawn].Move()
+            currentChunk = chunks[i]
 
-            particlesDrawn += 1
+            particlesDrawn = 0
+
+            while particlesDrawn < len(currentChunk):
+
+                currentChunk[particlesDrawn].DrawParticle()
+                currentChunk[particlesDrawn].Move()
+
+                particlesDrawn += 1
+
+            i += 1
 
 
     def main():
@@ -261,7 +289,7 @@ while restart:
 
         clock.tick(70000)
 
-        #CheckReaction()
+        CheckReaction()
 
         redrawWindowScreen()
         pygame.display.update()
