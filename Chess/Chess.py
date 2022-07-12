@@ -502,13 +502,13 @@ def checkSpecialRules(board):
     i = 0
     while i < 8:
         if type(board[0][i]) == piece.pawn:
-            board[0][i] = piece.queen(board[0][i].isWhite,1,i+1)
+            board[0][i] = piece.queen(board[0][i].isWhite,board[0][i].position.x,board[0][i].position.y)
             break
         i += 1    
     i = 0
     while i < 8:
         if type(board[7][i]) == piece.pawn:
-            board[7][i] = piece.queen(board[7][i].isWhite,8,i+1)
+            board[7][i] = piece.queen(board[7][i].isWhite,board[7][i].position.x,board[7][i].position.y)
             break
         i += 1
 
@@ -721,25 +721,6 @@ while not gameOver:
                         highlighted = False
                         selectedPiece = None
 
-            if numberOfLegalMoves(whiteTurn, chessBoard) == 0:
-
-                if inCheck(chessBoard):
-
-                    if whiteTurn:
-
-                        pygame.display.set_caption("[BLACK] wins by checkmate")
-
-                    else:
-
-                        pygame.display.set_caption("[WHITE] wins by checkmate")
-
-                else:
-
-                    pygame.display.set_caption("1/2 - stalemate")
-                    
-                gameOver = True
-                                        
-
             highlights = [ [ False, False, False, False, False, False, False, False, ],
                            [ False, False, False, False, False, False, False, False, ],
                            [ False, False, False, False, False, False, False, False, ],
@@ -774,5 +755,23 @@ while not gameOver:
                 highlighted = False       
 
             checkSpecialRules(chessBoard)
+
+            if numberOfLegalMoves(whiteTurn, chessBoard) == 0:
+
+                if inCheck(chessBoard):
+
+                    if whiteTurn:
+
+                        pygame.display.set_caption("[BLACK] wins by checkmate")
+
+                    else:
+
+                        pygame.display.set_caption("[WHITE] wins by checkmate")
+
+                else:
+
+                    pygame.display.set_caption("1/2 - stalemate")
+                    
+                gameOver = True
 
             DrawScreen()    
