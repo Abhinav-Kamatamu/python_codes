@@ -945,12 +945,13 @@ while (not gameOver) and (gameHasStarted):
             mousePosition = pygame.mouse.get_pos()
             coordinate = position(int(mousePosition[0]//sqaureSize), int(mousePosition[1]//sqaureSize))
 
+            print(highlighted)
             if (highlighted):
 
                 if (0 < coordinate.x < 9) and (0 < coordinate.y < 9):  
-                    print("3")
+                    
                     if highlights[coordinate.y - 1][coordinate.x - 1]:
-                        print("2")
+                        
                         if selfIsWhite:
 
                             chessBoard[coordinate.y - 1][coordinate.x - 1] = selectedPiece  
@@ -958,7 +959,7 @@ while (not gameOver) and (gameHasStarted):
                             selectedPiece.position = position(coordinate.x,coordinate.y)
 
                         else :
-                            print("1")
+                            
                             chessBoard[8 - coordinate.y][8 - coordinate.x] = selectedPiece  
                             chessBoard[selectedPiece.position.y - 1][selectedPiece.position.x - 1] = None
                             selectedPiece.position = position(9 - coordinate.x, 9 - coordinate.y)
@@ -994,10 +995,11 @@ while (not gameOver) and (gameHasStarted):
                             for move in selectedPiece.moves:
 
                                 highlights[move.y - 1][move.x - 1] = True
+
                             
                             highlighted = True
 
-                    if chessBoard[coordinate.y - 1][coordinate.x - 1] is None:
+                    elif chessBoard[coordinate.y - 1][coordinate.x - 1] is None:
 
                         selectedPiece = None
                         highlighted = False
@@ -1015,10 +1017,10 @@ while (not gameOver) and (gameHasStarted):
                             for move in selectedPiece.moves:
 
                                 highlights[8 - move.y][8 - move.x] = True
-                            
+
                             highlighted = True
 
-                    if chessBoard[8 - coordinate.y][8 - coordinate.y] is None:
+                    elif chessBoard[8 - coordinate.y][8 - coordinate.x] is None:
 
                         selectedPiece = None
                         highlighted = False                   
