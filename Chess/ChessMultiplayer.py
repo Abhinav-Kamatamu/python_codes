@@ -188,12 +188,12 @@ class piece():
                     if board[self.position.y][self.position.x - 1] is None:
                         self.moves.append(position(self.position.x, self.position.y + 1))
 
-                if -1 < self.position.x - 2 < 8:
+                if (-1 < self.position.x - 2 < 8) and (-1 < self.position.y < 8):
                     if board[self.position.y][self.position.x - 2] is not None:
                         if board[self.position.y][self.position.x - 2].isWhite is not self.isWhite:
                             self.moves.append(position(self.position.x - 1, self.position.y + 1))
-                if -1 < self.position.x < 8:        
-                    if board[self.position.y][self.position.x ] is not None:
+                if (-1 < self.position.x < 8) and (-1 < self.position.y < 8):        
+                    if board[self.position.y][self.position.x] is not None:
                         if board[self.position.y][self.position.x].isWhite is not self.isWhite:
                             self.moves.append(position(self.position.x + 1, self.position.y + 1))
                     
@@ -945,7 +945,6 @@ while (not gameOver) and (gameHasStarted):
             mousePosition = pygame.mouse.get_pos()
             coordinate = position(int(mousePosition[0]//sqaureSize), int(mousePosition[1]//sqaureSize))
 
-            print(highlighted)
             if (highlighted):
 
                 if (0 < coordinate.x < 9) and (0 < coordinate.y < 9):  
