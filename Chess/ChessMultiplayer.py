@@ -180,8 +180,8 @@ class piece():
                                     self.moves.append(position(self.position.x, self.position.y + 1))
                                     self.moves.append(position(self.position.x, self.position.y + 2))
 
-                            if board[self.position.y + 1][self.position.x - 1] is not None:
-                                self.moves.append(position(self.position.x, self.position.y + 1))
+                                if board[self.position.y + 1][self.position.x - 1] is not None:
+                                    self.moves.append(position(self.position.x, self.position.y + 1))
 
                 else:
 
