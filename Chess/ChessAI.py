@@ -849,7 +849,7 @@ while not gameOver:
 
     if not whiteTurn:
 
-        selectMove(chessBoard, 3)
+        selectMove(chessBoard, 2)
         whiteTurn = True
 
         DrawScreen()
