@@ -285,8 +285,8 @@ def drawScreen(update):
                 pygame.draw.rect(screen, highlightColors[(x + y)%2], (x * 125, y * 125, 125, 125))
 
             #only for testing moves lmao
-            #if (x, y) in currentLegalMoves:
-            #    pygame.draw.rect(screen, highlightColors[(x + y)%2], (x * 125, y * 125, 125, 125))
+            if (x, y) in currentLegalMoves:
+                pygame.draw.rect(screen, highlightColors[(x + y)%2], (x * 125, y * 125, 125, 125))
 
             if piece != "-":
 
