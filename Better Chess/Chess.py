@@ -1,5 +1,6 @@
 import pygame
 import sys
+import copy
 
 pygame.init()
 
@@ -105,9 +106,67 @@ def checkTeam(piece):
     return True
 
 
+def checkControlledSquares(position, team):
+
+    controlledSquares = []
+    clone = {}
+
+    #making clone without king--
+    breaked = False
+    i = 0
+    while i < len(position["board"]):
+
+        j = 0
+
+        while j < len(position["board"][i]):
+
+            piece = position["board"][i][j]
+
+            if piece != "-":
+
+                if piece.upper() == "K" and checkTeam(piece) is not team:
+
+                    clone = copy.deepcopy(position)
+                    clone["board"][i][j] = "-"
+
+                    breaked = True
+                    break
+
+            j += 1
+
+        if breaked:
+            break
+        i += 1
+
+    #checking controlled squares--
+    i = 0
+    while i < len(clone["board"]):
+
+        j = 0
+        while j < len(clone["board"][i]):
+
+            piece = clone["board"][i][j]
+
+            if piece != "-":
+
+                if checkTeam(piece) is team:
+
+                    moves = calculateMoves(clone, piece, j, i, True)
+
+                    for move in moves:
+
+                        if not (move in controlledSquares): 
+
+                            controlledSquares.append(move)
+
+            j += 1
+
+        i += 1    
+            
+    return controlledSquares
 
 
-def calculateSlidingPieces(currentPosition, team, x, y, directions):
+def calculateSlidingPieces(currentPosition, team, x, y, directions, control):
 
     moves = []
 
@@ -125,7 +184,7 @@ def calculateSlidingPieces(currentPosition, team, x, y, directions):
 
                     targetTeam = checkTeam(currentPosition["board"][y + (direction[1] * i)][x + (direction[0] * i)])
 
-                    if targetTeam is not team:
+                    if targetTeam is not team or control:
 
                         moves.append((x + (direction[0] * i), y + (direction[1] * i)))
 
@@ -139,7 +198,7 @@ def calculateSlidingPieces(currentPosition, team, x, y, directions):
 
 
 
-def caclulateStaticPieces(currentPosition, team, x, y, directions):
+def caclulateStaticPieces(currentPosition, team, x, y, directions, control):
 
     moves = []
 
@@ -149,7 +208,7 @@ def caclulateStaticPieces(currentPosition, team, x, y, directions):
 
                 if currentPosition["board"][y + direction[1]][x + direction[0]] != "-":
 
-                    if checkTeam(currentPosition["board"][y + direction[1]][x + direction[0]]) is team:
+                    if checkTeam(currentPosition["board"][y + direction[1]][x + direction[0]]) is team and (not control):
 
                         continue
 
@@ -160,7 +219,7 @@ def caclulateStaticPieces(currentPosition, team, x, y, directions):
 
 
 
-def calculateMoves(currentPosition, piece, x, y):
+def calculateMoves(currentPosition, piece, x, y, control):
 
     moves = []
     team = checkTeam(piece)
@@ -175,13 +234,13 @@ def calculateMoves(currentPosition, piece, x, y):
             i = 1
 
         #regularMovement
-        if currentPosition["board"][y + i][x] == "-":
+        if currentPosition["board"][y + i][x] == "-" and not control:
 
             moves.append((x, y + i))
                 
-        if y == int(3.5 + (-i * 2.5)) and currentPosition["board"][y + (2 * i)][x] == "-":
+            if y == int(3.5 + (-i * 2.5)) and currentPosition["board"][y + (2 * i)][x] == "-":
 
-            moves.append((x, y + (2 * i)))
+                moves.append((x, y + (2 * i)))
 
         #capturingMovement
         directions = [(-1, i), (1, i)]
@@ -194,11 +253,11 @@ def calculateMoves(currentPosition, piece, x, y):
 
             targetSquare = currentPosition["board"][y + direction[1]][x + direction[0]]
         
-            if targetSquare != "-":
+            if targetSquare != "-" or control:
 
                 targetTeam = checkTeam(targetSquare)
 
-                if targetTeam is not team:
+                if targetTeam is not team or control:
 
                     moves.append((x + direction[0], y + direction[1]))
 
@@ -215,7 +274,7 @@ def calculateMoves(currentPosition, piece, x, y):
 
         #knight l shapes
         directions = [(1,2), (2,1), (2,-1), (1,-2), (-1,-2), (-2,-1), (-2,1), (-1,2)]
-        moves = caclulateStaticPieces(currentPosition, team, x, y, directions)
+        moves = caclulateStaticPieces(currentPosition, team, x, y, directions, control)
                 
 
     #queen--
@@ -223,7 +282,7 @@ def calculateMoves(currentPosition, piece, x, y):
 
         #queen directions
         directions = [(1,1), (-1,1), (1,-1), (-1,-1), (1,0), (-1,0), (0,-1), (0,1)]
-        moves = calculateSlidingPieces(currentPosition, team, x, y, directions)
+        moves = calculateSlidingPieces(currentPosition, team, x, y, directions, control)
 
 
     #bishop--
@@ -231,7 +290,7 @@ def calculateMoves(currentPosition, piece, x, y):
 
         #bishop directions
         directions = [(1,1), (-1,1), (1,-1), (-1,-1)]
-        moves = calculateSlidingPieces(currentPosition, team, x, y, directions)
+        moves = calculateSlidingPieces(currentPosition, team, x, y, directions, control)
 
 
     #rook--
@@ -239,32 +298,85 @@ def calculateMoves(currentPosition, piece, x, y):
 
         # directions
         directions = [(1,0), (-1,0), (0,-1), (0,1)]
-        moves = calculateSlidingPieces(currentPosition, team, x, y, directions)
+        moves = calculateSlidingPieces(currentPosition, team, x, y, directions, control)
                 
 
+    #king--
     if piece.upper() == "K":
 
         #king directions
         directions = [(1,1), (-1,1), (1,-1), (-1,-1), (1,0), (-1,0), (0,-1), (0,1)]
-        moves = caclulateStaticPieces(currentPosition, team, x, y, directions)
+        moves = caclulateStaticPieces(currentPosition, team, x, y, directions, control)
 
+        #castling
         dict_ = {False: 0, True: 1}
 
-        if currentPosition["castling"][dict_[team]][1]:
+        if not control:
 
-            if (currentPosition["board"][dict_[team] * 7][5] == "-") and (currentPosition["board"][dict_[team] * 7][6] == "-"):
-                moves.append((6, dict_[team] * 7))
+            controlledSquares = checkControlledSquares(currentPosition, not currentPosition["turn"])
 
-        if currentPosition["castling"][dict_[team]][0]:
+            if currentPosition["castling"][dict_[team]][1]:
 
-            if (currentPosition["board"][dict_[team] * 7][3] == "-") and (currentPosition["board"][dict_[team] * 7][2] == "-") and (currentPosition["board"][dict_[team] * 7][1] == "-"):
-                moves.append((2, dict_[team] * 7))     
+                if (currentPosition["board"][dict_[team] * 7][5] == "-") and (currentPosition["board"][dict_[team] * 7][6] == "-") and not ((5, dict_[team] * 7) in controlledSquares):
+                    moves.append((6, dict_[team] * 7))
+
+            if currentPosition["castling"][dict_[team]][0]:
+
+                if (currentPosition["board"][dict_[team] * 7][3] == "-") and (currentPosition["board"][dict_[team] * 7][2] == "-") and (currentPosition["board"][dict_[team] * 7][1] == "-") and not ((3, dict_[team] * 7) in controlledSquares) and not ((1, dict_[team] * 7) in controlledSquares):
+                    moves.append((2, dict_[team] * 7))     
 
             
                         
     return moves
 
 
+
+
+def filterLegalMoves(position, moves, startingSquare): 
+
+    k = 0
+
+    while k < len(moves):
+
+        move = moves[k]
+
+        illegal = False
+        clone = copy.deepcopy(position)
+
+        playMove(clone, startingSquare, move, False)
+
+        controlledSquares = checkControlledSquares(clone, not position["turn"])
+
+        i = 0
+        while i < len(clone["board"]):
+            j = 0
+            while j < len(clone["board"][i]):
+
+                piece = clone["board"][i][j]
+
+                if piece != "-":
+
+                    team = checkTeam(piece)
+
+                    if piece.upper() == "K" and team is position["turn"]:
+
+                        if (j, i) in controlledSquares:
+                        
+                            illegal = True
+                            break
+
+                j += 1
+                
+            if illegal:
+                break
+            
+            i += 1
+
+        if illegal:
+            moves.remove(move)
+            continue
+
+        k += 1
 
 def drawScreen(update):
 
@@ -285,8 +397,8 @@ def drawScreen(update):
                 pygame.draw.rect(screen, highlightColors[(x + y)%2], (x * 125, y * 125, 125, 125))
 
             #only for testing moves lmao
-            if (x, y) in currentLegalMoves:
-                pygame.draw.rect(screen, highlightColors[(x + y)%2], (x * 125, y * 125, 125, 125))
+            #if (x, y) in currentLegalMoves:
+                #pygame.draw.rect(screen, highlightColors[(x + y)%2], (x * 125, y * 125, 125, 125))
 
             if piece != "-":
 
@@ -395,7 +507,7 @@ def castling(position, startingSquare, targetSquare, team, capture_):
     return capture         
                     
 
-def playMove(position, startingSquare, targetSquare, special):
+def playMove(position, startingSquare, targetSquare, main):
 
     global highlights
 
@@ -413,10 +525,12 @@ def playMove(position, startingSquare, targetSquare, special):
 
     capture = promotePawn(position, startingSquare, targetSquare, team, capture)
 
-    highlights = [startingSquare, targetSquare]
-    
-    position["turn"] = not position["turn"]
-    pygame.display.set_caption(turnCaption[position["turn"]] + "'s turn")
+    if main:
+        
+        highlights = [startingSquare, targetSquare]
+
+        position["turn"] = not position["turn"]
+        pygame.display.set_caption(turnCaption[position["turn"]] + "'s turn")
 
     return capture
 
@@ -453,7 +567,8 @@ while not gameOver:
                 selectedPiece = currentPiece
                 selectedPiece_position = coordinate
 
-                currentLegalMoves = calculateMoves(position, selectedPiece, coordinate[0], coordinate[1])
+                currentLegalMoves = calculateMoves(position, selectedPiece, coordinate[0], coordinate[1], False)
+                filterLegalMoves(position, currentLegalMoves, (coordinate[0], coordinate[1]))
 
         if event.type == pygame.MOUSEBUTTONUP:
 
@@ -462,7 +577,7 @@ while not gameOver:
 
             if coordinate in currentLegalMoves and selectedPiece is not None:
                 
-                sound = playMove(position, selectedPiece_position, coordinate, False)
+                sound = playMove(position, selectedPiece_position, coordinate, True)
 
                 audio[sound].play()
 
