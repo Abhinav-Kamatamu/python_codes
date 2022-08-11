@@ -59,8 +59,6 @@ highlightColors = {
 
                 }
 
-gameOver = False
-
 selectedPiece = None
 selectedPiece_position = (-1, -1)
 currentLegalMoves = []
@@ -88,8 +86,10 @@ position = {
     "castling" : [ [True, True],
                    [True, True] ],
 
-    "turn" : True
-    
+    "turn" : True,
+
+    "gameOver": False
+     
     }
 
 highlights = []
@@ -330,7 +330,60 @@ def calculateMoves(currentPosition, piece, x, y, control):
     return moves
 
 
+def checkNumberOfLegalMoves(position, team):
 
+    numberOfLegalMoves = 0
+
+    i = 0
+    while i < len(position["board"]):
+        j = 0
+        while j < len(position["board"][i]):
+
+            piece = position["board"][i][j]
+
+            if piece != "-":
+
+                if checkTeam(piece) is team:
+
+                    moves = calculateMoves(position, piece, j, i, False)
+                    filterLegalMoves(position, moves, (j, i))
+
+                    numberOfLegalMoves += len(moves)
+
+            j += 1
+
+        i += 1
+
+    return numberOfLegalMoves
+
+def inCheck(position, team):
+
+    check = False
+
+    controlledSquares = checkControlledSquares(position, not team)
+
+    i = 0
+    while i < len(position["board"]):
+        j = 0
+        while j < len(position["board"][i]):
+
+            piece = position["board"][i][j]
+
+            if piece.upper() == "K" and checkTeam(piece) == team:
+
+                if (j, i) in controlledSquares:
+
+                    check = True
+                    
+                break
+    
+            j += 1
+
+        if check:
+            break
+        i += 1
+
+    return check     
 
 def filterLegalMoves(position, moves, startingSquare): 
 
@@ -535,9 +588,26 @@ def playMove(position, startingSquare, targetSquare, main):
     return capture
 
 
+def endGame():
+
+    global position
+    
+    if checkNumberOfLegalMoves(position, position["turn"]) == 0:
+
+        if inCheck(position, position["turn"]):
+
+            pygame.display.set_caption(turnCaption[not position["turn"]] + " wins by Checkmate")
+
+        else:
+
+            pygame.display.set_caption("Stalemate ;-;")
 
 
-while not gameOver:
+        position["gameOver"] = True    
+
+            
+#main loop--
+while not position["gameOver"]:
 
     if selectedPiece is not None:
 
@@ -581,8 +651,20 @@ while not gameOver:
 
                 audio[sound].play()
 
+                endGame()
+
             selectedPiece = None
             selectedPiece_position = (-1, -1)
             currentLegalMoves.clear()
 
             drawScreen(True)
+
+            
+while True:
+
+    for event in pygame.event.get():
+
+        if event.type == pygame.QUIT:
+
+            pygame.quit()
+            sys.exit()
