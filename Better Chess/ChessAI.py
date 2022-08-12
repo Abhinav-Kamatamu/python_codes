@@ -96,6 +96,74 @@ position = {
 highlights = []
 
 
+#evaluation values--
+pieceValues = {
+
+    "P" : 100,
+    "N" : 300,
+    "B" : 300,
+    "R" : 500,
+    "Q" : 900
+
+    }
+
+#evaluation values--
+pieceTables = {
+
+    "P":[[00, 00, 00, 00, 00, 00, 00, 00],
+         [50, 50, 50, 50, 50, 50, 50, 50],
+         [10, 10, 20, 30, 30, 20, 10, 10],
+         [ 5,  5, 10, 25, 25, 10,  5,  5],
+         [00, 00, 00, 20, 20, 00, 00, 00],
+         [ 5, 00, 00, 00, 00, 00, 00,  5],
+         [ 5, 00,  5,-30,-30,  5, 00,  5],
+         [00, 00, 00, 00, 00, 00, 00, 00]],
+
+    "N":[[-50,-40,-30,-30,-30,-30,-40,-50],
+         [-40,-20,-10, 00, 00,-10,-20,-40],
+         [-30,-10, 00, 00, 00, 00,-10,-30],
+         [-10, 10, 00, 20, 20, 00, 10,-10],
+         [ 10,  5, 00, 00, 00, 00,  5, 10],
+         [ 00,- 5, 35,  5,  5, 35,- 5, 00],
+         [-10,-30,-10, 10, 10,-10,-30,-10],
+         [-70,-30,-40,-40,-40,-40,-30,-70]],
+
+    "B":[[-30, 00, 00,-10,-10, 00, 00,-30],
+         [-10, 00, 00, 00, 00, 00, 00,-10],
+         [-20, 00, 00, 00, 00, 00, 00,-20],
+         [  5, 25, 10,- 5,- 5, 10, 25,  5],
+         [- 5, 15, 30,  5,  5, 30, 15,- 5],
+         [-10,- 5, 00, 20, 20, 00,- 5,-10],
+         [-15, 20,-10, 15, 15,-10, 20,-15],
+         [-20,-15,-30,-15,-15,-30,-15,-20]],
+
+    "R":[[ 00, 00, 00, 00, 00, 00, 00, 00],
+         [- 5, 15, 15, 15, 15, 15, 15,- 5],
+         [- 5, 00, 00, 00, 00, 00, 00,- 5],
+         [- 5, 00, 00, 00, 00, 00, 00,- 5],
+         [- 5, 00, 00, 00, 00, 00, 00,- 5],
+         [- 5, 00, 00, 00, 00, 00, 00,- 5],
+         [- 5, 00, 00, 00, 00, 00, 00,- 5],
+         [  5, 00, 30, 50, 50, 30, 00,  5]],
+
+    "Q":[[ 25, 10, 10, 30, 30, 10, 10, 25],
+         [ 00, 15, 25, 00, 00, 25, 15, 00],
+         [-20,-25,-25,-25,-25,-25,-25,-20],
+         [ 15, 00,- 5,- 5,- 5,- 5, 00, 15],
+         [ 00,- 5,-10,-10,-10,-10,- 5, 00],
+         [- 5, 20, 00, 00, 00, 00, 20,- 5],
+         [-15,-10, 00, 15, 15, 00,-10,-15],
+         [-50,-40,-30, 10, 10,-30,-40,-50]],
+
+    "K":[[-200,-190,-180,-150,-150,-180,-190,-200],
+         [-190,-180,-150,-110,-110,-150,-180,-190],
+         [-180,-150,-110,-100,-100,-110,-150,-180],
+         [-150,-110,-100, -80, -80,-100,-110,-150],
+         [-110,-100, -80, -70, -70, -80,-100,-110],
+         [-100, -80, -70, -60, -60, -70, -80,-100],
+         [ -10, - 5, -20, -50, -50, -20, - 5, -10],
+         [  40, 150, 100,  50,  50, 100, 150,  40]]
+    }
 
 
 def checkTeam(piece):
@@ -611,22 +679,18 @@ def endGame():
 def evaluation(position):
 
     evaluation = 0
+    endGameWeight = 0
+    piecePositions = []
 
     whiteKing = False
     blackKing = False
+    
+    i = 0
+    while i < len(position["board"]):
+        j = 0
+        while j < len(position["board"][i]):
 
-    pieceValues = {
-
-        "P" : 100,
-        "N" : 300,
-        "B" : 300,
-        "R" : 500,
-        "Q" : 900
-
-        }
-
-    for row in position["board"]:
-        for piece in row:
+            piece = position["board"][i][j]
 
             if piece != "-":
 
@@ -645,6 +709,23 @@ def evaluation(position):
                         evaluation += pieceValues[piece]
                     else:
                         evaluation -= pieceValues[piece.upper()]
+
+                    endGameWeight += pieceValues[piece.upper()]
+                    piecePositions.append((piece, (j, i), team))
+
+            j += 1
+        i += 1
+
+    endGameWeight -= 2500
+    endGameWeight = max(0, endGameWeight)
+    endGameWeight = round(endGameWeight/5500, 1)
+
+    for piece_ in piecePositions:
+
+        if piece_[2]:
+            evaluation += (pieceTables[piece_[0]][piece_[1][1]][piece_[1][0]]) * endGameWeight
+        else:
+            evaluation -= (pieceTables[piece_[0].upper()][7 - piece_[1][1]][7 - piece_[1][0]]) * endGameWeight
 
     if not whiteKing:
         evaluation = -math.inf
@@ -669,7 +750,7 @@ def minimax(position, depth, maximizingPlayer, alpha, beta):
             j = 0
             while j < len(position["board"][i]):
                 piece = position["board"][i][j]
-                if piece != "-" and checkTeam(piece) is position["turn"]:
+                if piece != "-" and checkTeam(piece):
                     moves = calculateMoves(position, piece, j, i, False)
                     for move in moves:
 
@@ -683,7 +764,8 @@ def minimax(position, depth, maximizingPlayer, alpha, beta):
                             maxEvaluation = currentEvaluation
                             maxPosition = clone
 
-                        alpha = max(alpha, currentEvaluation)
+                        if currentEvaluation > alpha:
+                            alpha = currentEvaluation
                         if beta <= alpha:   
                             break
                 if beta <= alpha:   
@@ -705,7 +787,7 @@ def minimax(position, depth, maximizingPlayer, alpha, beta):
             j = 0
             while j < len(position["board"][i]):
                 piece = position["board"][i][j]
-                if piece != "-" and checkTeam(piece) is position["turn"]:
+                if piece != "-" and not checkTeam(piece):
                     moves = calculateMoves(position, piece, j, i, False)
                     for move in moves:
 
@@ -719,7 +801,8 @@ def minimax(position, depth, maximizingPlayer, alpha, beta):
                             minEvaluation = currentEvaluation
                             minPosition = clone
 
-                        beta = min(beta, currentEvaluation)
+                        if currentEvaluation < beta:
+                            beta = currentEvaluation
                         if beta <= alpha:
                             break
                 if beta <= alpha:
@@ -738,10 +821,12 @@ while not position["gameOver"]:
     #AI turn--
     if not position["turn"]:
 
-        output = minimax(position, 5, False, -math.inf, math.inf)
+        output = minimax(position, 4, False, -math.inf, math.inf)
 
         position["board"] = output[1]["board"]
         position["turn"] = True
+        pygame.display.set_caption(turnCaption[position["turn"]] + "'s turn")
+        endGame()
 
         print(output[0])
 
