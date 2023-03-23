@@ -377,16 +377,6 @@ while MLrunning:
 
     clock.tick(gameFps)
 
-    for event in pygame.event.get():
-    
-        if event.type == pygame.QUIT:
-
-            ReproduceBirds()
-            print(bestBrain)
-
-            pygame.quit()
-            sys.exit()
-
     for flappyBird in FlappyBirds:
     
         jump = flappyBird.NeuralNetwork()
@@ -404,3 +394,19 @@ while MLrunning:
     SetGroundParameter()
     UpdateScreen()
 
+    for event in pygame.event.get():
+    
+        if event.type == pygame.QUIT:
+
+            ReproduceBirds()
+            print(bestBrain)
+            MLrunning = False
+            
+
+while True:
+    for event in pygame.event.get():
+    
+        if event.type == pygame.QUIT:
+
+            pygame.quit()
+            sys.exit()
