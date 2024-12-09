@@ -311,65 +311,65 @@ class Board:
         else:
             return [-1, -1]
 
-    def show_peice_possibility(self, board_start_point):
-
-    def king_possibilies(self, position, colour):  # this is to check which square the king is safe
-        if (self.grid[position[1] - 1][position[0] + 1].piece_type == PAWN) or (
-                self.grid[position[1] - 1][position[0] - 1].piece_type == PAWN):
-            if (self.grid[position[1] - 1][position[0] + 1].colour != colour) or (
-                    self.grid[position[1] - 1][position[0] - 1].colour != colour):
-                return False
-        (x, y) = position
-        threats = []
-        for j in range(0, 4):
-            for i in range(1, 9):
-                if j == 0:
-                    direction_coordinate = (x - i, y - i)
-                elif j == 1:
-                    direction_coordinate = (x + i, y + i)
-                elif j == 2:
-                    direction_coordinate = (x - i, y + i)
-                else:
-                    direction_coordinate = (x + i, y - i)
-                if direction_coordinate[1] > 7 or direction_coordinate[1] < 0:
-                    break
-                elif direction_coordinate[0] > 7 or direction_coordinate[0] < 0:
-                    break
-                elif self.grid[direction_coordinate[1]][direction_coordinate[0]] != 0:
-                    if self.grid[direction_coordinate[1]][direction_coordinate[0]].colour != colour:
-                        if (self.grid[direction_coordinate[1]][direction_coordinate[0]].piece_type == BISHOP) or (
-                                self.grid[direction_coordinate[1]][direction_coordinate[0]].piece_type == QUEEN):
-                            threats.append(direction_coordinate)
-                    else:
-                        break
-                else:
-                    pass
-        for j in range(0, 4):
-            for i in range(1, 9):
-                if j == 0:
-                    direction_coordinate = (x - i, y)
-                elif j == 1:
-                    direction_coordinate = (x + i, y)
-                elif j == 2:
-                    direction_coordinate = (x, y + i)
-                else:
-                    direction_coordinate = (x, y - i)
-                if direction_coordinate[1] > 7 or direction_coordinate[1] < 0:
-                    break
-                elif direction_coordinate[0] > 7 or direction_coordinate[0] < 0:
-                    break
-                elif self.grid[direction_coordinate[1]][direction_coordinate[0]] != 0:
-                    if self.grid[direction_coordinate[1]][direction_coordinate[0]].colour != colour:
-                        if (self.grid[direction_coordinate[1]][direction_coordinate[0]].piece_type == ROOK) or (
-                                self.grid[direction_coordinate[1]][direction_coordinate[0]].piece_type == QUEEN):
-                            threats.append(direction_coordinate)
-                    else:
-                        break
-                else:
-                    pass
-
+    #def show_peice_possibility(self, board_start_point):
 
 board = Board(width, height)
+
+
+def king_possibilies(self, position, colour):  # this is to check which square the king is safe
+    if (self.grid[position[1] - 1][position[0] + 1].piece_type == PAWN) or (
+            self.grid[position[1] - 1][position[0] - 1].piece_type == PAWN):
+        if (self.grid[position[1] - 1][position[0] + 1].colour != colour) or (
+                self.grid[position[1] - 1][position[0] - 1].colour != colour):
+            return False
+    (x, y) = position
+    threats = []
+    for j in range(0, 4):
+        for i in range(1, 9):
+            if j == 0:
+                direction_coordinate = (x - i, y - i)
+            elif j == 1:
+                direction_coordinate = (x + i, y + i)
+            elif j == 2:
+                direction_coordinate = (x - i, y + i)
+            else:
+                direction_coordinate = (x + i, y - i)
+            if direction_coordinate[1] > 7 or direction_coordinate[1] < 0:
+                break
+            elif direction_coordinate[0] > 7 or direction_coordinate[0] < 0:
+                break
+            elif self.grid[direction_coordinate[1]][direction_coordinate[0]] != 0:
+                if self.grid[direction_coordinate[1]][direction_coordinate[0]].colour != colour:
+                    if (self.grid[direction_coordinate[1]][direction_coordinate[0]].piece_type == BISHOP) or (
+                            self.grid[direction_coordinate[1]][direction_coordinate[0]].piece_type == QUEEN):
+                        threats.append(direction_coordinate)
+                else:
+                    break
+            else:
+                pass
+    for j in range(0, 4):
+        for i in range(1, 9):
+            if j == 0:
+                direction_coordinate = (x - i, y)
+            elif j == 1:
+                direction_coordinate = (x + i, y)
+            elif j == 2:
+                direction_coordinate = (x, y + i)
+            else:
+                direction_coordinate = (x, y - i)
+            if direction_coordinate[1] > 7 or direction_coordinate[1] < 0:
+                break
+            elif direction_coordinate[0] > 7 or direction_coordinate[0] < 0:
+                break
+            elif self.grid[direction_coordinate[1]][direction_coordinate[0]] != 0:
+                if self.grid[direction_coordinate[1]][direction_coordinate[0]].colour != colour:
+                    if (self.grid[direction_coordinate[1]][direction_coordinate[0]].piece_type == ROOK) or (
+                            self.grid[direction_coordinate[1]][direction_coordinate[0]].piece_type == QUEEN):
+                        threats.append(direction_coordinate)
+                else:
+                    break
+            else:
+                pass
 board.startup()
 board.render_direction_white()
 while True:
