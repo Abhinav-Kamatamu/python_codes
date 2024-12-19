@@ -56,4 +56,6 @@ class Board:
             ['br', 'bn', 'bb', 'bq', 'bk', 'bb', 'bn', 'br']
         ]
         self.turn = WHITE
+        self.selected = None
+
 
