@@ -249,5 +249,14 @@ def Check_user(file_name):
         prediction = Neural_Network.feed_forward(image_vector)
         print(f"The neural net thinks your digit is : {np.argmax(prediction,axis = 0)}")
 
+def Start_Training(file_name):
+    Neural_Network = Network([784, 24, 24, 24, 10], 4)
+    train_network(x_train, y_train_hot, 1500, 100, Neural_Network)
+
+    # Save the better version of the training
+    acc_final = run_test(x_test, y_test, Neural_Network)
+    params = Neural_Network.export_params()
+    handle_data(params, file_name, True)
+
 
 Continue_Training("a.pickle")
