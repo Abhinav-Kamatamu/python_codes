@@ -5,6 +5,8 @@ from pygame.locals import *
 
 pygame.init()
 
+#hahahha
+
 width = 800
 height = 800
 
