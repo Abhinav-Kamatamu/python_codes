@@ -67,21 +67,21 @@ bestBrain = None
 #--------------------------
 
 #'images-------------------
-flappyBirdImage = pygame.image.load('flappy bird.png')
+flappyBirdImage = pygame.image.load('Better Flappy Bird/flappy bird.png')
 flappyBirdImage = pygame.transform.scale(flappyBirdImage, birdSize)
 
-groundImage = pygame.image.load('ground.png')
+groundImage = pygame.image.load('Better Flappy Bird/ground.png')
 groundImage = pygame.transform.scale(groundImage, groundSize)
 
-backGroundImage = pygame.image.load('background.png')
+backGroundImage = pygame.image.load('Better Flappy Bird/background.png')
 backGroundImage = pygame.transform.scale(backGroundImage, backGroundSize)
 
-topPipeImage = pygame.image.load('top pipe.png')
+topPipeImage = pygame.image.load('Better Flappy Bird/top pipe.png')
 topPipeImage = pygame.transform.scale(topPipeImage, pipeSize)
 bottomPipeImage = pygame.transform.rotate(topPipeImage, 180)
 
-impactFont = pygame.font.SysFont("impact", scoreSize)
-arielFont = pygame.font.SysFont("ariel", scoreSize)
+impactFont = pygame.font.SysFont("Better Flappy Bird/impact", scoreSize)
+arielFont = pygame.font.SysFont("Better Flappy Bird/ariel", scoreSize)
 #--------------------------
 
 display = pygame.display.set_mode((width, height))
