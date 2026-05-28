@@ -6,28 +6,28 @@ pygame.init()
 
 images = {
 
-    "p" : pygame.image.load("blackPawn.png"),
-    "n" : pygame.image.load("blackKnight.png"),
-    "b" : pygame.image.load("blackBishop.png"),
-    "r" : pygame.image.load("blackRook.png"),
-    "q" : pygame.image.load("blackQueen.png"),
-    "k" : pygame.image.load("blackKing.png"),
+    "p" : pygame.image.load("Better Chess/blackPawn.png"),
+    "n" : pygame.image.load("Better Chess/blackKnight.png"),
+    "b" : pygame.image.load("Better Chess/blackBishop.png"),
+    "r" : pygame.image.load("Better Chess/blackRook.png"),
+    "q" : pygame.image.load("Better Chess/blackQueen.png"),
+    "k" : pygame.image.load("Better Chess/blackKing.png"),
 
-    "P" : pygame.image.load("whitePawn.png"),
-    "N" : pygame.image.load("whiteKnight.png"),
-    "B" : pygame.image.load("whiteBishop.png"),
-    "R" : pygame.image.load("whiteRook.png"),
-    "Q" : pygame.image.load("whiteQueen.png"),
-    "K" : pygame.image.load("whiteKing.png"),
+    "P" : pygame.image.load("Better Chess/whitePawn.png"),
+    "N" : pygame.image.load("Better Chess/whiteKnight.png"),
+    "B" : pygame.image.load("Better Chess/whiteBishop.png"),
+    "R" : pygame.image.load("Better Chess/whiteRook.png"),
+    "Q" : pygame.image.load("Better Chess/whiteQueen.png"),
+    "K" : pygame.image.load("Better Chess/whiteKing.png"),
 
-    "chessBoard" : pygame.transform.scale(pygame.image.load("chessBoard.png"), (1000, 1000))
+    "chessBoard" : pygame.transform.scale(pygame.image.load("Better Chess/chessBoard.png"), (1000, 1000))
     
     }
 
 audio = {
 
-    True : pygame.mixer.Sound("captureSound.mp3"),
-    False : pygame.mixer.Sound("moveSound.mp3")
+    True : pygame.mixer.Sound("Better Chess/captureSound.mp3"),
+    False : pygame.mixer.Sound("Better Chess/moveSound.mp3")
 
     }
 
